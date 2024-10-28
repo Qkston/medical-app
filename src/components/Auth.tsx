@@ -14,6 +14,7 @@ import {
 import { confirmSignUp, signIn, signUp } from "aws-amplify/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./ProtectedRoute";
+import axios from "axios";
 
 interface AuthValues {
   email: string;
@@ -31,7 +32,7 @@ const AuthComponent: React.FC = () => {
     type: "success" | "error" | "info";
   } | null>(null);
   const navigate = useNavigate();
-  const { checkAuth } = useAuth();
+  const { checkAuth, userRole } = useAuth();
 
   const handleSignUp = async (
     values: AuthValues,
@@ -49,6 +50,10 @@ const AuthComponent: React.FC = () => {
       });
       setEmail(values.email);
       setIsConfirming(true);
+			
+			// Saving information about the doctor in the database
+			await axios.post("https://zqqep83bba.execute-api.eu-north-1.amazonaws.com/medical-app-staging/save-user", { email: values.email, role: "doctor" });
+
       setNotification({
         message:
           "Акаунт створено. Будь ласка, перевірте вашу електронну пошту для отримання коду підтвердження.",
@@ -91,7 +96,7 @@ const AuthComponent: React.FC = () => {
       await signIn({ username: values.email, password: values.password });
       setNotification({ message: "Вхід виконано", type: "success" });
       checkAuth();
-      navigate("/main");
+      navigate(userRole === "doctor" ? "/dashboard" : userRole === "patient" ? "/chat" : "/");
     } catch (error) {
       setNotification({ message: "Помилка при вході", type: "error" });
       console.error("Помилка при вході", error);

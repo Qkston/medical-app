@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -25,8 +25,8 @@ const RegisterPatient: React.FC = () => {
   const navigate = useNavigate();
   const email = decodeURIComponent(searchParams.get("email") || "");
   const doctorId = searchParams.get("doctorId") || "";
-  const [isConfirming, setIsConfirming] = React.useState(false);
-  const [notification, setNotification] = React.useState<{
+  const [isConfirming, setIsConfirming] = useState(false);
+  const [notification, setNotification] = useState<{
     message: string;
     type: "success" | "error" | "info";
   } | null>(null);
@@ -60,24 +60,24 @@ const RegisterPatient: React.FC = () => {
           type: "success",
         });
 
-        // Збереження інформації про пацієнта в базі даних
+        // Saving information about the patient in the database
         await axios.post(
           "https://fvis7cwi09.execute-api.eu-north-1.amazonaws.com/medical-app-staging/save-patient",
           {
             doctorId: doctorId,
             patientEmail: email,
+						role: "patient"
           }
         );
 
         setTimeout(() => navigate("/login"), 2000); // Redirect after 2 seconds
       } catch (error) {
-        // console.error("Error confirming sign up", error);
-        // setNotification({
-        //   message:
-        //     "Помилка при підтвердженні електронної пошти. Спробуйте ще раз.",
-        //   type: "error",
-        // });
-        setTimeout(() => navigate("/login"), 2000); // Redirect after 2 seconds
+        console.error("Error confirming sign up", error);
+        setNotification({
+          message:
+            "Помилка при підтвердженні електронної пошти. Спробуйте ще раз.",
+          type: "error",
+        });
       }
       setSubmitting(false);
     } else {

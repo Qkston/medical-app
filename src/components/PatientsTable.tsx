@@ -25,8 +25,8 @@ import * as Yup from "yup";
 import axios from "axios";
 import { getCurrentUser } from "aws-amplify/auth";
 
-const MainScreen: React.FC = () => {
-  const [tabValue, setTabValue] = useState(0);
+const PatientsTable: React.FC = () => {
+	const [tabValue, setTabValue] = useState(0);
   const [open, setOpen] = useState(false);
   const [patients, setPatients] = useState<any[]>([]);
   const [notification, setNotification] = useState<{
@@ -225,6 +225,6 @@ const MainScreen: React.FC = () => {
       )}
     </Container>
   );
-};
+}
 
-export default MainScreen;
+export default PatientsTable;

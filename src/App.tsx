@@ -1,3 +1,4 @@
+import { signOut } from "aws-amplify/auth";
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -7,7 +8,6 @@ import {
   useLocation,
 } from "react-router-dom";
 import AuthComponent from "./components/Auth";
-import MainScreen from "./components/MainScreen";
 import RegisterPatient from "./components/RegisterPatient";
 import ProtectedRoute, {
   AuthProvider,
@@ -22,10 +22,11 @@ import {
   Container,
   Box,
 } from "@mui/material";
-import { signOut } from "aws-amplify/auth";
+import PatientsTable from "./components/PatientsTable";
+import ChatWithDoctor from "./components/ChatWithDoctor";
 
 const App: React.FC = () => {
-  const { checkAuth } = useAuth();
+  const { checkAuth, userRole } = useAuth();
 
   const handleSignOut = async () => {
     try {
@@ -73,25 +74,33 @@ const App: React.FC = () => {
             <Route
               path="/login"
               element={
-                <AuthRedirect redirectPath="/dashboard">
+                <AuthRedirect redirectPath={userRole === "doctor" ? "/dashboard" : userRole === "patient" ? "/chat" : "/login"}>
                   <AuthComponent />
                 </AuthRedirect>
               }
             />
+						<Route path="/register" element={<RegisterPatient />} />
             <Route
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <MainScreen />
+                  <PatientsTable />
                 </ProtectedRoute>
               }
             />
-            <Route path="/register" element={<RegisterPatient />} />
+						<Route
+              path="/chat"
+              element={
+                <ProtectedRoute>
+                  <ChatWithDoctor />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="*"
               element={
                 <ProtectedRoute>
-                  <Navigate to="/dashboard" />
+                  <Navigate to={userRole === "doctor" ? "/dashboard" : userRole === "patient" ? "/chat" : "/"} />
                 </ProtectedRoute>
               }
             />
