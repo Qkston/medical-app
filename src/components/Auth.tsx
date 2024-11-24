@@ -38,7 +38,7 @@ const AuthComponent: React.FC = () => {
 
   const handleSignUp = async (values: AuthValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     try {
-      await signUp({
+      const newDoctorCognitoData = await signUp({
         username: values.email,
         password: values.password,
         options: {
@@ -54,6 +54,7 @@ const AuthComponent: React.FC = () => {
       await axios.post("https://zqqep83bba.execute-api.eu-north-1.amazonaws.com/medical-app-staging/save-user", {
         email: values.email,
         role: "doctor",
+        cognitoId: newDoctorCognitoData.userId,
       });
 
       setNotification({

@@ -23,7 +23,6 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { getCurrentUser } from "aws-amplify/auth";
 
 const PatientsTable: React.FC = () => {
 	const [tabValue, setTabValue] = useState(0);
@@ -37,8 +36,9 @@ const PatientsTable: React.FC = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const user = await getCurrentUser();
-        const doctorId = user.username;
+				const user = localStorage.getItem("user");
+				if (!user) throw new Error("No user data found in localStorage")
+        const doctorId = JSON.parse(user).id;
 
         const response = await axios.get(
           `https://89b3040o74.execute-api.eu-north-1.amazonaws.com/medical-app-staging/get-patients?doctorId=${doctorId}`
@@ -78,8 +78,9 @@ const PatientsTable: React.FC = () => {
       const token = generateUniqueToken();
 
       try {
-        const user = await getCurrentUser();
-        const doctorId = user.username;
+        const user = localStorage.getItem("user");
+				if (!user) throw new Error("No user data found in localStorage")
+        const doctorId = JSON.parse(user).id;
 
         await axios.post(
           "https://p6qixdltrb.execute-api.eu-north-1.amazonaws.com/medical-app-staging/send-invite",

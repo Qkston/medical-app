@@ -15,6 +15,7 @@ const App: React.FC = () => {
     try {
       await signOut();
       checkAuth();
+			localStorage.removeItem("user")
       window.location.reload();
     } catch (error) {
       console.error("Error signing out", error);

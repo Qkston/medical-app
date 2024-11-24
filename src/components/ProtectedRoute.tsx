@@ -37,10 +37,12 @@ export const AuthProvider: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   const fetchUserRole = async (currentUserEmail: string) => {
     try {
-      const role = await axios.get(
+      const user = await axios.get(
         `https://5cbbxrp1m3.execute-api.eu-north-1.amazonaws.com/medical-app-staging/get-user-role?email=${currentUserEmail}`
       );
-      setUserRole(prevRole => (prevRole !== role.data.role ? role.data.role : prevRole)); // Only update if changed
+      setUserRole(prevRole => (prevRole !== user.data.user.role ? user.data.user.role : prevRole)); // Only update if changed
+			
+			if (!localStorage.getItem("user")) localStorage.setItem("user", JSON.stringify(user.data.user))
     } catch (error) {
       console.error("Error fetching user role", error);
     }
