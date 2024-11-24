@@ -1,16 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import {
-  Box,
-  Button,
-  Container,
-  TextField,
-  Typography,
-  Link,
-  Alert,
-  Snackbar,
-} from "@mui/material";
+import { Box, Button, Container, TextField, Typography, Link, Alert, Snackbar } from "@mui/material";
 import { confirmSignUp, signIn, signUp } from "aws-amplify/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./ProtectedRoute";
@@ -32,12 +23,20 @@ const AuthComponent: React.FC = () => {
     type: "success" | "error" | "info";
   } | null>(null);
   const navigate = useNavigate();
-  const { checkAuth, userRole } = useAuth();
+  const { checkAuth, userRole, isAuthenticated } = useAuth();
 
-  const handleSignUp = async (
-    values: AuthValues,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
-  ) => {
+  useEffect(() => {
+    if (isAuthenticated && userRole) {
+      if (userRole === "doctor") {
+        navigate("/dashboard");
+      } else if (userRole === "patient") {
+        navigate("/chat");
+      }
+      window.location.reload();
+    }
+  }, [isAuthenticated, userRole, navigate]);
+
+  const handleSignUp = async (values: AuthValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     try {
       await signUp({
         username: values.email,
@@ -50,13 +49,15 @@ const AuthComponent: React.FC = () => {
       });
       setEmail(values.email);
       setIsConfirming(true);
-			
-			// Saving information about the doctor in the database
-			await axios.post("https://zqqep83bba.execute-api.eu-north-1.amazonaws.com/medical-app-staging/save-user", { email: values.email, role: "doctor" });
+
+      // Saving information about the doctor in the database
+      await axios.post("https://zqqep83bba.execute-api.eu-north-1.amazonaws.com/medical-app-staging/save-user", {
+        email: values.email,
+        role: "doctor",
+      });
 
       setNotification({
-        message:
-          "Акаунт створено. Будь ласка, перевірте вашу електронну пошту для отримання коду підтвердження.",
+        message: "Акаунт створено. Будь ласка, перевірте вашу електронну пошту для отримання коду підтвердження.",
         type: "success",
       });
     } catch (error) {
@@ -66,10 +67,7 @@ const AuthComponent: React.FC = () => {
     setSubmitting(false);
   };
 
-  const handleConfirmSignUp = async (
-    values: AuthValues,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
-  ) => {
+  const handleConfirmSignUp = async (values: AuthValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     try {
       await confirmSignUp({
         username: email,
@@ -88,15 +86,11 @@ const AuthComponent: React.FC = () => {
     setSubmitting(false);
   };
 
-  const handleSignIn = async (
-    values: AuthValues,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
-  ) => {
+  const handleSignIn = async (values: AuthValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     try {
       await signIn({ username: values.email, password: values.password });
       setNotification({ message: "Вхід виконано", type: "success" });
       checkAuth();
-      navigate(userRole === "doctor" ? "/dashboard" : userRole === "patient" ? "/chat" : "/");
     } catch (error) {
       setNotification({ message: "Помилка при вході", type: "error" });
       console.error("Помилка при вході", error);
@@ -105,20 +99,14 @@ const AuthComponent: React.FC = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string()
-      .email("Невірний формат електронної пошти")
-      .required("Це поле є обов'язковим"),
-    password: Yup.string()
-      .min(8, "Пароль повинен містити мінімум 8 символів")
-      .required("Це поле є обов'язковим"),
+    email: Yup.string().email("Невірний формат електронної пошти").required("Це поле є обов'язковим"),
+    password: Yup.string().min(8, "Пароль повинен містити мінімум 8 символів").required("Це поле є обов'язковим"),
     confirmPassword: isSignUp
       ? Yup.string()
           .oneOf([Yup.ref("password"), undefined], "Паролі не співпадають")
           .required("Це поле є обов'язковим")
       : Yup.string().notRequired(),
-    confirmationCode: isConfirming
-      ? Yup.string().required("Це поле є обов'язковим")
-      : Yup.string().notRequired(),
+    confirmationCode: isConfirming ? Yup.string().required("Це поле є обов'язковим") : Yup.string().notRequired(),
   });
 
   return (
@@ -129,19 +117,13 @@ const AuthComponent: React.FC = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-        }}
-      >
+        }}>
         <Typography component="h1" variant="h5">
-          {isConfirming
-            ? "Підтвердження коду"
-            : isSignUp
-            ? "Реєстрація"
-            : "Вхід"}
+          {isConfirming ? "Підтвердження коду" : isSignUp ? "Реєстрація" : "Вхід"}
         </Typography>
         {isSignUp && !isConfirming && (
           <Alert severity="info" sx={{ mt: 2, mb: 2 }}>
-            Увага! Ви будете зареєстровані як лікар. Якщо ви є пацієнтом,
-            отримайте запрошення від вашого лікаря.
+            Увага! Ви будете зареєстровані як лікар. Якщо ви є пацієнтом, отримайте запрошення від вашого лікаря.
           </Alert>
         )}
         <Formik
@@ -152,14 +134,7 @@ const AuthComponent: React.FC = () => {
             confirmationCode: "",
           }}
           validationSchema={validationSchema}
-          onSubmit={
-            isConfirming
-              ? handleConfirmSignUp
-              : isSignUp
-              ? handleSignUp
-              : handleSignIn
-          }
-        >
+          onSubmit={isConfirming ? handleConfirmSignUp : isSignUp ? handleSignUp : handleSignIn}>
           {({ isSubmitting }) => (
             <Form>
               {!isConfirming && (
@@ -212,42 +187,21 @@ const AuthComponent: React.FC = () => {
                   helperText={<ErrorMessage name="confirmationCode" />}
                 />
               )}
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                disabled={isSubmitting}
-                sx={{ mt: 3, mb: 2 }}
-              >
-                {isConfirming
-                  ? "Підтвердити"
-                  : isSignUp
-                  ? "Зареєструватись"
-                  : "Увійти"}
+              <Button type="submit" fullWidth variant="contained" color="primary" disabled={isSubmitting} sx={{ mt: 3, mb: 2 }}>
+                {isConfirming ? "Підтвердити" : isSignUp ? "Зареєструватись" : "Увійти"}
               </Button>
             </Form>
           )}
         </Formik>
         {!isConfirming && (
           <Link href="#" variant="body2" onClick={() => setIsSignUp(!isSignUp)}>
-            {isSignUp
-              ? "Вже маєте акаунт? Увійти"
-              : "Не маєте акаунта? Зареєструватись"}
+            {isSignUp ? "Вже маєте акаунт? Увійти" : "Не маєте акаунта? Зареєструватись"}
           </Link>
         )}
       </Box>
       {notification && (
-        <Snackbar
-          open={Boolean(notification)}
-          autoHideDuration={6000}
-          onClose={() => setNotification(null)}
-        >
-          <Alert
-            onClose={() => setNotification(null)}
-            severity={notification.type}
-            sx={{ width: "100%" }}
-          >
+        <Snackbar open={Boolean(notification)} autoHideDuration={6000} onClose={() => setNotification(null)}>
+          <Alert onClose={() => setNotification(null)} severity={notification.type} sx={{ width: "100%" }}>
             {notification.message}
           </Alert>
         </Snackbar>

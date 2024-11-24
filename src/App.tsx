@@ -1,27 +1,10 @@
-import { signOut } from "aws-amplify/auth";
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { signOut } from "aws-amplify/auth";
+import { AppBar, Toolbar, Button, Typography, Container, Box } from "@mui/material";
 import AuthComponent from "./components/Auth";
 import RegisterPatient from "./components/RegisterPatient";
-import ProtectedRoute, {
-  AuthProvider,
-  useAuth,
-} from "./components/ProtectedRoute";
-import AuthRedirect from "./components/AuthRedirect";
-import {
-  AppBar,
-  Toolbar,
-  Button,
-  Typography,
-  Container,
-  Box,
-} from "@mui/material";
+import ProtectedRoute, { AuthProvider, useAuth } from "./components/ProtectedRoute";
 import PatientsTable from "./components/PatientsTable";
 import ChatWithDoctor from "./components/ChatWithDoctor";
 
@@ -39,16 +22,14 @@ const App: React.FC = () => {
   };
 
   const Header = () => {
-    const location = useLocation();
-    const hideAppBar =
-      location.pathname === "/login" || location.pathname === "/register";
+    const { isAuthenticated } = useAuth();
+    const hideAppBar = ["/login", "/register"].includes(window.location.pathname);
 
-    return !hideAppBar ? (
+    if (!isAuthenticated || hideAppBar) return null;
+
+    return (
       <>
-        <AppBar
-          position="static"
-          sx={{ backgroundColor: "transparent", boxShadow: "none" }}
-        >
+        <AppBar position="static" sx={{ backgroundColor: "transparent", boxShadow: "none" }}>
           <Toolbar>
             <Typography color="#1976d2" variant="h6" sx={{ flexGrow: 1 }}>
               CareSync - Медичний застосунок
@@ -58,11 +39,19 @@ const App: React.FC = () => {
             </Button>
           </Toolbar>
         </AppBar>
-        <Box
-          sx={{ width: "100%", height: "4px", backgroundColor: "#e0e0e0" }}
-        />
+        <Box sx={{ width: "100%", height: "4px", backgroundColor: "#e0e0e0" }} />
       </>
-    ) : null;
+    );
+  };
+
+  const RoleRedirect = () => {
+    if (userRole === "doctor") {
+      return <Navigate to="/dashboard" replace />;
+    } else if (userRole === "patient") {
+      return <Navigate to="/chat" replace />;
+    } else {
+      return <Navigate to="/login" replace />;
+    }
   };
 
   return (
@@ -71,39 +60,25 @@ const App: React.FC = () => {
         <Header />
         <Container>
           <Routes>
-            <Route
-              path="/login"
-              element={
-                <AuthRedirect redirectPath={userRole === "doctor" ? "/dashboard" : userRole === "patient" ? "/chat" : "/login"}>
-                  <AuthComponent />
-                </AuthRedirect>
-              }
-            />
-						<Route path="/register" element={<RegisterPatient />} />
+            <Route path="/login" element={<AuthComponent />} />
+            <Route path="/register" element={<RegisterPatient />} />
             <Route
               path="/dashboard"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["doctor"]}>
                   <PatientsTable />
                 </ProtectedRoute>
               }
             />
-						<Route
+            <Route
               path="/chat"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["patient"]}>
                   <ChatWithDoctor />
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="*"
-              element={
-                <ProtectedRoute>
-                  <Navigate to={userRole === "doctor" ? "/dashboard" : userRole === "patient" ? "/chat" : "/"} />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="*" element={<RoleRedirect />} />
           </Routes>
         </Container>
       </Router>
