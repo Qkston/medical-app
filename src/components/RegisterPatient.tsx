@@ -53,6 +53,7 @@ const RegisterPatient: React.FC = () => {
           patientEmail: email,
           role: "patient",
           cognitoId: newPatientCognitoId,
+          isArchived: false,
         });
 
         setTimeout(() => navigate("/login"), 1000); // Redirect after 1 seconds
