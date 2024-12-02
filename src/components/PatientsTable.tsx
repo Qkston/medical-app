@@ -24,6 +24,7 @@ import UnarchiveOutlinedIcon from "@mui/icons-material/UnarchiveOutlined";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface Patient {
   patientEmail: string;
@@ -31,6 +32,8 @@ interface Patient {
 }
 
 const PatientsTable: React.FC = () => {
+  const navigate = useNavigate();
+
   const [tabValue, setTabValue] = useState(0);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [open, setOpen] = useState(false);
@@ -62,6 +65,10 @@ const PatientsTable: React.FC = () => {
 
     fetchPatients();
   }, []);
+
+  const handleOpenChat = (patientEmail: string) => {
+    navigate(`/chat/${patientEmail}`);
+  };
 
   // Handle tab switching
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -179,7 +186,11 @@ const PatientsTable: React.FC = () => {
             <ListItem key={patient.patientEmail} sx={{ display: "flex", justifyContent: "space-between" }}>
               <ListItemText primary={patient.patientEmail} />
               <Box>
-                <Button variant="contained" color="primary" sx={{ mr: 2 }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleOpenChat(patient.patientEmail)}
+                  sx={{ mr: 2 }}>
                   Чат
                 </Button>
                 <IconButton edge="end" color="primary" onClick={() => handleArchiveToggle(patient.patientEmail, patient.isArchived)}>

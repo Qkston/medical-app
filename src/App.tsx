@@ -15,7 +15,7 @@ const App: React.FC = () => {
     try {
       await signOut();
       checkAuth();
-			localStorage.removeItem("user")
+      localStorage.removeItem("user");
       window.location.reload();
     } catch (error) {
       console.error("Error signing out", error);
@@ -75,6 +75,14 @@ const App: React.FC = () => {
               path="/chat"
               element={
                 <ProtectedRoute allowedRoles={["patient"]}>
+                  <ChatWithDoctor />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/chat/:patientEmail"
+              element={
+                <ProtectedRoute allowedRoles={["doctor"]}>
                   <ChatWithDoctor />
                 </ProtectedRoute>
               }
