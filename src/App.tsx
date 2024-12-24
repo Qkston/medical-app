@@ -7,6 +7,7 @@ import RegisterPatient from "./components/RegisterPatient";
 import ProtectedRoute, { AuthProvider, useAuth } from "./components/ProtectedRoute";
 import PatientsTable from "./components/PatientsTable";
 import ChatWithDoctor from "./components/ChatWithDoctor";
+import VideoCall from "./components/VideoCall";
 
 const App: React.FC = () => {
   const { checkAuth, userRole } = useAuth();
@@ -84,6 +85,14 @@ const App: React.FC = () => {
               element={
                 <ProtectedRoute allowedRoles={["doctor"]}>
                   <ChatWithDoctor />
+                </ProtectedRoute>
+              }
+            />
+						<Route
+              path="/video-call"
+              element={
+                <ProtectedRoute allowedRoles={["doctor", "patient"]}>
+                  <VideoCall />
                 </ProtectedRoute>
               }
             />
