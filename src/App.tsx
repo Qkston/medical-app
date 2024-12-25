@@ -8,6 +8,7 @@ import ProtectedRoute, { AuthProvider, useAuth } from "./components/ProtectedRou
 import PatientsTable from "./components/PatientsTable";
 import ChatWithDoctor from "./components/ChatWithDoctor";
 import VideoCall from "./components/VideoCall";
+import SettingsPopup from "./components/SettingsPopup";
 
 const App: React.FC = () => {
   const { checkAuth, userRole } = useAuth();
@@ -29,6 +30,11 @@ const App: React.FC = () => {
 
     if (!isAuthenticated || hideAppBar) return null;
 
+		const userRecord = localStorage.getItem("user");
+    if (!userRecord) return null;
+
+    const user = JSON.parse(userRecord);
+
     return (
       <>
         <AppBar position="static" sx={{ backgroundColor: "transparent", boxShadow: "none" }}>
@@ -36,6 +42,9 @@ const App: React.FC = () => {
             <Typography color="#1976d2" variant="h6" sx={{ flexGrow: 1 }}>
               CareSync - Медичний застосунок
             </Typography>
+						<Box sx={{ mr: 2 }}>
+							{user?.role === "doctor" && <SettingsPopup />}
+						</Box>
             <Button variant="outlined" color="primary" onClick={handleSignOut}>
               Вийти
             </Button>

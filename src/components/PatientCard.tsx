@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import {
   MenuButtonBold,
   MenuButtonBulletedList,
@@ -26,6 +26,7 @@ const PatientCard: React.FC<PatientCardProps> = ({ patientEmail, doctorEmail }) 
   const [userRole, setUserRole] = useState<"doctor" | "patient" | null>(null);
   const [content, setContent] = useState("<p>Інформація про пацієнта...</p>");
   const [updatedContent, setUpdatedContent] = useState(content);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const userRecord = localStorage.getItem("user");
@@ -46,6 +47,8 @@ const PatientCard: React.FC<PatientCardProps> = ({ patientEmail, doctorEmail }) 
         setContent(response.data.content || "<p>Інформація про пацієнта...</p>");
       } catch (error) {
         console.error("Error fetching patient card:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -89,7 +92,11 @@ const PatientCard: React.FC<PatientCardProps> = ({ patientEmail, doctorEmail }) 
           Редагувати картку
         </Button>
       )}
-      <Box sx={{ maxHeight: "520px", overflow: "auto" }} dangerouslySetInnerHTML={{ __html: content }} />
+      {isLoading ? (
+        <CircularProgress sx={{ display: "flex", justifySelf: "center", alignSelf: "center" }} />
+      ) : (
+        <Box sx={{ maxHeight: "520px", overflow: "auto" }} dangerouslySetInnerHTML={{ __html: content }} />
+      )}
       {open && (
         <Dialog open={open} fullWidth maxWidth="md">
           <DialogTitle>Редагувати картку пацієнта</DialogTitle>

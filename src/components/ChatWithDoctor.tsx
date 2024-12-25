@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, TextField, Button, Typography, List, ListItem, Paper } from "@mui/material";
+import { Box, TextField, Button, Typography, List, ListItem, Paper, Skeleton, Backdrop, CircularProgress } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
 import PatientCard from "./PatientCard";
+import { FeatureSettings } from "./SettingsPopup";
 
 interface Message {
   sender: string;
@@ -29,6 +30,7 @@ const ChatWithDoctor: React.FC = () => {
   const [user, setUser] = useState<User | null>();
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [receiverEmail, setReceiverEmail] = useState<string>("");
+  const [settings, setSettings] = useState<FeatureSettings | null>();
 
   useEffect(() => {
     const userRecord = localStorage.getItem("user");
@@ -51,6 +53,17 @@ const ChatWithDoctor: React.FC = () => {
       ws.close();
     };
   }, []);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const response = await axios.get("https://eylhcitap2.execute-api.eu-north-1.amazonaws.com/medical-app-staging/doctor-settings", {
+        params: { email: user?.email },
+      });
+      setSettings(response.data?.settings);
+    };
+
+    if (user && user.role === "doctor") fetchSettings();
+  }, [user]);
 
   useEffect(() => {
     const fetchChatHistory = async () => {
@@ -131,80 +144,98 @@ const ChatWithDoctor: React.FC = () => {
           Повернутись на дашборд
         </Button>
       )}
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <Box sx={{ width: "60%" }}>
-          <Typography variant="h6" color="primary" sx={{ marginBottom: 2 }}>
-            {user?.role === "doctor" ? `Чат з пацієнтом: ${patientEmail}` : "Чат з вашим доктором"}
-          </Typography>
-          {user?.role === "doctor" && (
-            <Button variant="contained" color="secondary" sx={{ marginBottom: 2 }} onClick={handleStartVideoCall}>
-              Почати відеодзвінок
-            </Button>
-          )}
-          <Box
-            sx={{
-              height: "400px",
-              overflowY: "auto",
-              border: "1px solid #e0e0e0",
-              borderRadius: "8px",
-              padding: 2,
-              marginBottom: 2,
-              backgroundColor: "#f5f5f5",
-            }}>
-            <List>
-              {messages
-                .sort((a, b) => moment(a.timestamp).diff(b.timestamp))
-                .map((msg, index) => (
-                  <ListItem
-                    key={index}
-                    sx={{
-                      display: "flex",
-                      justifyContent: msg.sender === user?.email ? "flex-end" : "flex-start",
-                      marginBottom: "10px",
-                    }}>
-                    <Paper
+      {!socket || !settings ? (
+        <Backdrop sx={theme => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })} open={!socket || !settings}>
+          <CircularProgress />
+        </Backdrop>
+      ) : (
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Box sx={{ width: settings.patientCardsEnabled ? "60%" : "100%" }}>
+            <Typography variant="h6" color="primary" sx={{ marginBottom: 2 }}>
+              {user?.role === "doctor" ? `Чат з пацієнтом: ${patientEmail}` : "Чат з вашим доктором"}
+            </Typography>
+            {user?.role === "doctor" && (
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={{ marginBottom: 2 }}
+                disabled={!settings.videoChatEnabled}
+                title={
+                  !settings.videoChatEnabled
+                    ? "Ви вимкнули цей функціонал для заощадження трафіку. Увімкніть цей параметр в налаштуваннях, щоб користуватись цим функціоналом."
+                    : ""
+                }
+                onClick={handleStartVideoCall}>
+                Почати відеодзвінок
+              </Button>
+            )}
+            <Box
+              sx={{
+                height: "400px",
+                overflowY: "auto",
+                border: "1px solid #e0e0e0",
+                borderRadius: "8px",
+                padding: 2,
+                marginBottom: 2,
+                backgroundColor: "#f5f5f5",
+              }}>
+              <List>
+                {messages
+                  .sort((a, b) => moment(a.timestamp).diff(b.timestamp))
+                  .map((msg, index) => (
+                    <ListItem
+                      key={index}
                       sx={{
-                        padding: "10px",
-                        borderRadius: "10px",
-                        maxWidth: "70%",
-                        backgroundColor: msg.sender === user?.email ? "#bffcbd" : "#9effea",
+                        display: "flex",
+                        justifyContent: msg.sender === user?.email ? "flex-end" : "flex-start",
+                        marginBottom: "10px",
                       }}>
-                      <Typography
-                        variant="caption"
+                      <Paper
                         sx={{
-                          display: "block",
-                          textAlign: msg.sender === user?.email ? "right" : "left",
-                          marginBottom: "5px",
-                          color: "#6c757d",
+                          padding: "10px",
+                          borderRadius: "10px",
+                          maxWidth: "70%",
+                          backgroundColor: msg.sender === user?.email ? "#bffcbd" : "#9effea",
                         }}>
-                        {moment(msg.timestamp).format("MMMM DD, HH:mm:ss")}
-                      </Typography>
-                      <Typography variant="body2">{msg.message}</Typography>
-                    </Paper>
-                  </ListItem>
-                ))}
-              <div ref={messagesEndRef} />
-            </List>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            display: "block",
+                            textAlign: msg.sender === user?.email ? "right" : "left",
+                            marginBottom: "5px",
+                            color: "#6c757d",
+                          }}>
+                          {moment(msg.timestamp).format("MMMM DD, HH:mm:ss")}
+                        </Typography>
+                        <Typography variant="body2">{msg.message}</Typography>
+                      </Paper>
+                    </ListItem>
+                  ))}
+                <div ref={messagesEndRef} />
+              </List>
+            </Box>
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                value={message}
+                onChange={e => setMessage(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Напишіть повідомлення..."
+              />
+              <Button onClick={handleSendMessage} variant="contained" color="primary" sx={{ marginLeft: 2 }}>
+                Відправити
+              </Button>
+            </Box>
           </Box>
-          <Box sx={{ display: "flex" }}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              value={message}
-              onChange={e => setMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Напишіть повідомлення..."
+          {settings.patientCardsEnabled && (
+            <PatientCard
+              patientEmail={user?.role === "doctor" && patientEmail ? patientEmail : user?.email || ""}
+              doctorEmail={user?.role === "doctor" ? user.email : user?.doctorEmail || ""}
             />
-            <Button onClick={handleSendMessage} variant="contained" color="primary" sx={{ marginLeft: 2 }}>
-              Відправити
-            </Button>
-          </Box>
+          )}
         </Box>
-        <PatientCard
-          patientEmail={user?.role === "doctor" && patientEmail ? patientEmail : user?.email || ""}
-          doctorEmail={user?.role === "doctor" ? user.email : user?.doctorEmail || ""}
-        />
-      </Box>
+      )}
     </Box>
   );
 };

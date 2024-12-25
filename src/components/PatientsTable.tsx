@@ -17,6 +17,7 @@ import {
   TextField,
   Snackbar,
   Alert,
+	CircularProgress,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ArchiveIcon from "@mui/icons-material/Archive";
@@ -42,6 +43,8 @@ const PatientsTable: React.FC = () => {
     type: "success" | "error" | "info";
   } | null>(null);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   // Fetch patients on component mount
   useEffect(() => {
     const fetchPatients = async () => {
@@ -60,6 +63,8 @@ const PatientsTable: React.FC = () => {
           message: "Помилка завантаження пацієнтів",
           type: "error",
         });
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -176,7 +181,9 @@ const PatientsTable: React.FC = () => {
         </Tabs>
       </Box>
 
-      {filteredPatients.length === 0 ? (
+      {isLoading ? (
+        <CircularProgress sx={{ display: "flex", justifySelf: "center", alignSelf: "center" }} />
+      ) : filteredPatients.length === 0 ? (
         <Typography variant="h6" color="textSecondary">
           {tabValue === 0 ? "Тут будуть відображені актуальні пацієнти." : "Тут будуть відображені архівовані пацієнти."}
         </Typography>
@@ -186,11 +193,7 @@ const PatientsTable: React.FC = () => {
             <ListItem key={patient.patientEmail} sx={{ display: "flex", justifyContent: "space-between" }}>
               <ListItemText primary={patient.patientEmail} />
               <Box>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleOpenChat(patient.patientEmail)}
-                  sx={{ mr: 2 }}>
+                <Button variant="contained" color="primary" onClick={() => handleOpenChat(patient.patientEmail)} sx={{ mr: 2 }}>
                   Чат
                 </Button>
                 <IconButton edge="end" color="primary" onClick={() => handleArchiveToggle(patient.patientEmail, patient.isArchived)}>
