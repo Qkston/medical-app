@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Результати тестування</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h2 {
+      margin-top: 30px;
+    }
+    .chart-container {
+      width: 35%;
+      display: inline-block;
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Результати тестування</h1>
+
+  <!-- Діаграма 1: Тестування текстового чату -->
+  <h2>Тестування текстового чату</h2>
+  <div class="chart-container">
+    <canvas id="chatTest"></canvas>
+  </div>
+
+  <!-- Діаграма 2: Відеозв'язок -->
+  <h2>Оптимізація взаємодії за допомогою відеозв'язку</h2>
+  <div class="chart-container">
+    <canvas id="videoTest"></canvas>
+  </div>
+
+  <!-- Діаграма 3: Продуктивність системи -->
+  <h2>Продуктивність системи</h2>
+  <div class="chart-container">
+    <canvas id="performanceTest"></canvas>
+  </div>
+
+  <!-- Діаграма 4: Оптимізація ресурсів AWS -->
+  <h2>Оптимізація ресурсів AWS</h2>
+  <div class="chart-container">
+    <canvas id="awsOptimization"></canvas>
+  </div>
+
+  <script>
+		const tooltipOptions = {
+      plugins: {
+        tooltip: {
+          enabled: true, // Вмикає тултіпи
+          external: function (context) {
+            const chart = context.chart;
+            const tooltip = context.tooltip;
+            if (tooltip.opacity === 0) {
+              return;
+            }
+            chart.options.plugins.tooltip.displayColors = false;
+          },
+        },
+      },
+    };
+
+    // Діаграма 1: Текстовий чат
+    new Chart(document.getElementById('chatTest'), {
+      type: 'bar',
+      data: {
+        labels: ['Затримка (мс)', 'Дисперсія (мс)'],
+        datasets: [
+          {
+            label: 'Етап 1',
+            data: [180, 25],
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+          },
+          {
+            label: 'Етап 2',
+            data: [140, 20],
+            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+          },
+        ],
+      },
+      options: {
+				...tooltipOptions,
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true },
+        },
+      },
+    });
+
+    // Діаграма 2: Відеозв'язок
+    new Chart(document.getElementById('videoTest'), {
+      type: 'bar',
+      data: {
+        labels: ['Час взаємодії (сек)', 'Дисперсія (сек)'],
+        datasets: [
+          {
+            label: 'Етап 1',
+            data: [2.4, 0.5],
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+          },
+          {
+            label: 'Етап 2',
+            data: [1.8, 0.3],
+            backgroundColor: 'rgba(255, 206, 86, 0.6)',
+          },
+        ],
+      },
+      options: {
+				...tooltipOptions,
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true },
+        },
+      },
+    });
+
+    // Діаграма 3: Продуктивність системи
+    new Chart(document.getElementById('performanceTest'), {
+      type: 'bar',
+      data: {
+        labels: ['Завантаження CPU (%)', 'Дисперсія (мс)'],
+        datasets: [
+          {
+            label: 'Етап 1',
+            data: [65, 30],
+            backgroundColor: 'rgba(153, 102, 255, 0.6)',
+          },
+          {
+            label: 'Етап 2',
+            data: [70, 20],
+            backgroundColor: 'rgba(255, 159, 64, 0.6)',
+          },
+        ],
+      },
+      options: {
+				...tooltipOptions,
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true },
+        },
+      },
+    });
+
+    // Діаграма 4: Оптимізація ресурсів AWS
+    new Chart(document.getElementById('awsOptimization'), {
+      type: 'bar',
+      data: {
+        labels: ['Час обробки запитів (мс)', 'Економія витрат (%)'],
+        datasets: [
+          {
+            label: 'Етап 1',
+            data: [200, 0],
+            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+          },
+          {
+            label: 'Етап 2',
+            data: [150, 40],
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+          },
+        ],
+      },
+      options: {
+				...tooltipOptions,
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true },
+        },
+      },
+    });
+  </script>
+</body>
+</html>

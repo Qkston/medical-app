@@ -5,7 +5,6 @@ import axios from "axios";
 
 export interface FeatureSettings {
   videoChatEnabled: boolean;
-  chatDuringVideoCallEnabled: boolean;
   patientCardsEnabled: boolean;
 }
 
@@ -13,7 +12,6 @@ const SettingsPopup: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [settings, setSettings] = useState<FeatureSettings>({
     videoChatEnabled: true,
-    chatDuringVideoCallEnabled: true,
     patientCardsEnabled: true,
   });
   const [tempSettings, setTempSettings] = useState(settings);
@@ -63,9 +61,6 @@ const SettingsPopup: React.FC = () => {
 
   const handleSwitchChange = (key: keyof FeatureSettings, value: boolean) => {
     const updatedSettings = { ...tempSettings, [key]: value };
-    if (key === "videoChatEnabled" && !value) {
-      updatedSettings.chatDuringVideoCallEnabled = false;
-    }
     setTempSettings(updatedSettings);
   };
 
@@ -83,16 +78,6 @@ const SettingsPopup: React.FC = () => {
           <FormControlLabel
             control={<Switch checked={!!tempSettings.videoChatEnabled} onChange={e => handleSwitchChange("videoChatEnabled", e.target.checked)} />}
             label="Відеочат з пацієнтами"
-          />
-          <FormControlLabel
-            control={
-              <Switch
-                checked={!!tempSettings.chatDuringVideoCallEnabled}
-                disabled={!tempSettings.videoChatEnabled}
-                onChange={e => handleSwitchChange("chatDuringVideoCallEnabled", e.target.checked)}
-              />
-            }
-            label="Використання чату під час відеодзвінків"
           />
           <FormControlLabel
             control={

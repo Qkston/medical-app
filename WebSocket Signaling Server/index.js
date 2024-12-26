@@ -1,38 +1,27 @@
-const WebSocket = require("ws");
-const wss = new WebSocket.Server({ port: 8080 });
+import express from "express";
+import { createServer } from "http";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+import { Server } from "socket.io";
+import { config } from "dotenv";
+import initSocket from "./utils/initSocket.js";
 
-const connections = new Map();
+config();
 
-wss.on("connection", (ws, req) => {
-  const userId = new URLSearchParams(req.url.split("?")[1]).get("id");
-  if (!userId) {
-    ws.close(1008, "Missing user ID");
-    return;
-  }
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-  console.log(`User connected: ${userId}`);
-  connections.set(userId, ws);
+const app = express();
+const server = createServer(app);
 
-  ws.on("message", message => {
-    const data = JSON.parse(message);
+app.use(express.static(join(__dirname, "../client/dist")));
 
-    if (data.targetId) {
-      const targetWs = connections.get(data.targetId);
-      if (targetWs && targetWs.readyState === WebSocket.OPEN) {
-        console.log(`Relaying message from ${userId} to ${data.targetId}`);
-        targetWs.send(JSON.stringify({ ...data, senderId: userId }));
-      } else {
-        console.warn(`Target ${data.targetId} not connected.`);
-      }
-    }
-  });
+const io = new Server(server, {
+  cors: process.env.ALLOWED_ORIGIN,
+  serveClient: false,
+});
+io.on("connection", initSocket);
 
-  ws.on("close", () => {
-    console.log(`User disconnected: ${userId}`);
-    connections.delete(userId);
-  });
-
-  ws.on("error", error => {
-    console.error(`WebSocket error for user ${userId}:`, error);
-  });
+const port = process.env.PORT || 8080;
+server.listen(port, () => {
+  console.log(`Server ready on port ${port}`);
 });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, TextField, Button, Typography, List, ListItem, Paper, Skeleton, Backdrop, CircularProgress } from "@mui/material";
+import { Box, TextField, Button, Typography, List, ListItem, Paper, Backdrop, CircularProgress } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
@@ -57,12 +57,12 @@ const ChatWithDoctor: React.FC = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       const response = await axios.get("https://eylhcitap2.execute-api.eu-north-1.amazonaws.com/medical-app-staging/doctor-settings", {
-        params: { email: user?.email },
+        params: { email: user?.role === "doctor" ? user.email : user?.doctorEmail },
       });
       setSettings(response.data?.settings);
     };
 
-    if (user && user.role === "doctor") fetchSettings();
+    if (user) fetchSettings();
   }, [user]);
 
   useEffect(() => {
@@ -118,25 +118,6 @@ const ChatWithDoctor: React.FC = () => {
     }
   };
 
-  const sendCallLink = async () => {
-    const callLink = `${window.location.origin}/video-call?patientEmail=${patientEmail}`;
-    try {
-      await fetch("https://k0ieme2qx9.execute-api.eu-north-1.amazonaws.com/medical-app-staging/send-videocall-invite", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ patientEmail, callLink }),
-      });
-      console.log("Посилання на відеодзвінок надіслано");
-    } catch (error) {
-      console.error("Помилка надсилання посилання:", error);
-    }
-  };
-
-  const handleStartVideoCall = () => {
-    navigate(`/video-call?patientEmail=${patientEmail}`);
-    sendCallLink();
-  };
-
   return (
     <Box sx={{ padding: 2 }}>
       {user?.role === "doctor" && (
@@ -144,13 +125,13 @@ const ChatWithDoctor: React.FC = () => {
           Повернутись на дашборд
         </Button>
       )}
-      {!socket || !settings ? (
+      {!socket || (user?.role === "doctor" && !settings) ? (
         <Backdrop sx={theme => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })} open={!socket || !settings}>
           <CircularProgress />
         </Backdrop>
       ) : (
         <Box sx={{ display: "flex", gap: 2 }}>
-          <Box sx={{ width: settings.patientCardsEnabled ? "60%" : "100%" }}>
+          <Box sx={{ width: settings?.patientCardsEnabled ? "60%" : "100%" }}>
             <Typography variant="h6" color="primary" sx={{ marginBottom: 2 }}>
               {user?.role === "doctor" ? `Чат з пацієнтом: ${patientEmail}` : "Чат з вашим доктором"}
             </Typography>
@@ -159,13 +140,13 @@ const ChatWithDoctor: React.FC = () => {
                 variant="contained"
                 color="secondary"
                 sx={{ marginBottom: 2 }}
-                disabled={!settings.videoChatEnabled}
+                disabled={!settings?.videoChatEnabled}
                 title={
-                  !settings.videoChatEnabled
+                  !settings?.videoChatEnabled
                     ? "Ви вимкнули цей функціонал для заощадження трафіку. Увімкніть цей параметр в налаштуваннях, щоб користуватись цим функціоналом."
                     : ""
                 }
-                onClick={handleStartVideoCall}>
+                onClick={() => navigate(`/video-call/${patientEmail}`)}>
                 Почати відеодзвінок
               </Button>
             )}
@@ -228,7 +209,7 @@ const ChatWithDoctor: React.FC = () => {
               </Button>
             </Box>
           </Box>
-          {settings.patientCardsEnabled && (
+          {settings?.patientCardsEnabled && (
             <PatientCard
               patientEmail={user?.role === "doctor" && patientEmail ? patientEmail : user?.email || ""}
               doctorEmail={user?.role === "doctor" ? user.email : user?.doctorEmail || ""}
