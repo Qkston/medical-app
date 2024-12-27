@@ -1,5 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
+import { Backdrop, CircularProgress } from "@mui/material";
 import { useAuth } from "./ProtectedRoute";
 
 interface AuthRedirectProps {
@@ -7,14 +8,15 @@ interface AuthRedirectProps {
   redirectPath: string;
 }
 
-const AuthRedirect: React.FC<AuthRedirectProps> = ({
-  children,
-  redirectPath,
-}) => {
+const AuthRedirect: React.FC<AuthRedirectProps> = ({ children, redirectPath }) => {
   const { isAuthenticated } = useAuth();
 
   if (isAuthenticated === null) {
-    return <div>Loading...</div>;
+    return (
+      <Backdrop sx={theme => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })} open={isAuthenticated === null}>
+        <CircularProgress />
+      </Backdrop>
+    );
   }
 
   return isAuthenticated ? <Navigate to={redirectPath} /> : children;

@@ -3,7 +3,7 @@ import { Box, IconButton } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-export const CallWindow = ({ remoteSrc, localSrc, config, mediaDevice, finishCall }: any) => {
+const CallWindow = ({ remoteSrc, localSrc, config, mediaDevice, finishCall }: any) => {
   const { patientEmail } = useParams<{ patientEmail: string }>();
   const navigate = useNavigate();
 
@@ -11,10 +11,10 @@ export const CallWindow = ({ remoteSrc, localSrc, config, mediaDevice, finishCal
   const localVideo = useRef<any>();
   const localVideoSize = useRef<any>();
 
-  const [video, setVideo] = useState<any>(config?.video);
-  const [audio, setAudio] = useState<any>(config?.audio);
-  const [dragging, setDragging] = useState<any>(false);
-  const [coords, setCoords] = useState<any>({
+  const [video, setVideo] = useState<boolean>(config?.video);
+  const [audio, setAudio] = useState<boolean>(config?.audio);
+  const [dragging, setDragging] = useState<boolean>(false);
+  const [coords, setCoords] = useState<{ x: number; y: number }>({
     x: 0,
     y: 0,
   });
@@ -111,3 +111,5 @@ export const CallWindow = ({ remoteSrc, localSrc, config, mediaDevice, finishCal
     </Box>
   );
 };
+
+export default CallWindow;

@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { Button, TextField, Typography, Snackbar, Alert, Box, Container } from "@mui/material";
 import axios from "axios";
 import { confirmSignUp, signUp } from "aws-amplify/auth";
+import { savePatientLink } from "../utils/awsLinks";
 
 interface RegisterValues {
   password: string;
@@ -17,7 +18,8 @@ const RegisterPatient: React.FC = () => {
   const navigate = useNavigate();
   const email = decodeURIComponent(searchParams.get("email") || "");
   const doctorId = searchParams.get("doctorId") || "";
-	const [newPatientCognitoId, setNewPatientCognitoId] = useState<string | undefined>();
+
+  const [newPatientCognitoId, setNewPatientCognitoId] = useState<string | undefined>();
   const [isConfirming, setIsConfirming] = useState(false);
   const [notification, setNotification] = useState<{
     message: string;
@@ -47,8 +49,7 @@ const RegisterPatient: React.FC = () => {
           type: "success",
         });
 
-        // Saving information about the patient in the database
-        await axios.post("https://fvis7cwi09.execute-api.eu-north-1.amazonaws.com/medical-app-staging/save-patient", {
+        await axios.post(savePatientLink, {
           doctorId: doctorId,
           patientEmail: email,
           role: "patient",
@@ -56,7 +57,7 @@ const RegisterPatient: React.FC = () => {
           isArchived: false,
         });
 
-        setTimeout(() => navigate("/login"), 1000); // Redirect after 1 seconds
+        setTimeout(() => navigate("/login"), 1000);
       } catch (error) {
         console.error("Error confirming sign up", error);
         setNotification({
@@ -77,7 +78,7 @@ const RegisterPatient: React.FC = () => {
           },
         });
         setIsConfirming(true);
-				setNewPatientCognitoId(newPatientCognitoData.userId);
+        setNewPatientCognitoId(newPatientCognitoData.userId);
         setNotification({
           message: "Акаунт створено. Будь ласка, введіть код підтвердження з вашої електронної пошти.",
           type: "info",

@@ -1,10 +1,22 @@
 import { useEffect, useState } from "react";
 import { Alert, Box, Button, CircularProgress, Snackbar, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
-import socket from "../../utils/socket";
 import axios from "axios";
+import { sendVideocallInviteLink } from "../../utils/awsLinks";
+import socket from "../../utils/video/socket";
 
-export const VideoCall = ({ startCall }: { startCall: any }) => {
+const VideoCall = ({
+  startCall,
+}: {
+  startCall: (
+    isCaller: boolean,
+    remoteId: string,
+    config: {
+      audio: boolean;
+      video: boolean;
+    }
+  ) => Promise<void>;
+}) => {
   const { patientEmail } = useParams<{ patientEmail: string }>();
 
   const [localId, setLocalId] = useState("");
@@ -30,7 +42,7 @@ export const VideoCall = ({ startCall }: { startCall: any }) => {
   const sendCallLink = async (id: string) => {
     const callLink = `${window.location.origin}/video-call/${id}`;
     try {
-      await axios.post("https://k0ieme2qx9.execute-api.eu-north-1.amazonaws.com/medical-app-staging/send-videocall-invite", {
+      await axios.post(sendVideocallInviteLink, {
         patientEmail,
         callLink,
       });
@@ -66,7 +78,9 @@ export const VideoCall = ({ startCall }: { startCall: any }) => {
   } else
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
-        <Button onClick={() => startCall(true, patientEmail, { audio: true, video: true })}>Підключитись до дзвінка</Button>
+        <Button onClick={() => startCall(true, patientEmail || "", { audio: true, video: true })}>Підключитись до дзвінка</Button>
       </Box>
     );
 };
+
+export default VideoCall;

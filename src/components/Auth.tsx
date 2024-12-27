@@ -4,8 +4,9 @@ import * as Yup from "yup";
 import { Box, Button, Container, TextField, Typography, Link, Alert, Snackbar } from "@mui/material";
 import { confirmSignUp, signIn, signUp } from "aws-amplify/auth";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "./ProtectedRoute";
 import axios from "axios";
+import { useAuth } from "./ProtectedRoute";
+import { saveDoctorLink } from "../utils/awsLinks";
 
 interface AuthValues {
   email: string;
@@ -50,8 +51,7 @@ const AuthComponent: React.FC = () => {
       setEmail(values.email);
       setIsConfirming(true);
 
-      // Saving information about the doctor in the database
-      await axios.post("https://zqqep83bba.execute-api.eu-north-1.amazonaws.com/medical-app-staging/save-user", {
+      await axios.post(saveDoctorLink, {
         email: values.email,
         role: "doctor",
         cognitoId: newDoctorCognitoData.userId,

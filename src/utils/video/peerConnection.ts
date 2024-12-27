@@ -1,11 +1,21 @@
-import Emitter from "./Emitter";
-import MediaDevice from "./MediaDevices";
+import Emitter from "./emitter";
+import MediaDevice from "./mediaDevice";
 import socket from "./socket";
 
-const CONFIG = { iceServers: [{ urls: ["stun:stun.l.google.com:19302"] }] };
+const CONFIG: RTCConfiguration = { iceServers: [{ urls: ["stun:stun.l.google.com:19302"] }] };
+
+interface SignalMessage {
+  to: string;
+  sdp?: RTCSessionDescriptionInit;
+  candidate?: RTCIceCandidateInit;
+}
 
 class PeerConnection extends Emitter {
-  constructor(remoteId) {
+  private remoteId: string;
+  private pc: RTCPeerConnection;
+  private mediaDevice: MediaDevice;
+
+  constructor(remoteId: string) {
     super();
     this.remoteId = remoteId;
 
@@ -16,71 +26,72 @@ class PeerConnection extends Emitter {
         candidate,
       });
     };
+
     this.pc.ontrack = ({ streams }) => {
       this.emit("remoteStream", streams[0]);
     };
 
     this.mediaDevice = new MediaDevice();
-
     this.getDescription = this.getDescription.bind(this);
   }
 
-  start(isCaller, config) {
+  start(isCaller: boolean, config?: MediaStreamConstraints): this {
     this.mediaDevice
-      .on("stream", stream => {
+      .on("stream", (stream: MediaStream) => {
         stream.getTracks().forEach(t => {
           this.pc.addTrack(t, stream);
         });
 
         this.emit("localStream", stream);
 
-        isCaller ? socket.emit("request", { to: this.remoteId }) : this.createOffer();
+        if (isCaller) {
+          socket.emit("request", { to: this.remoteId });
+        } else {
+          this.createOffer();
+        }
       })
-      .start(config);
+      .start();
 
     return this;
   }
 
-  stop(isCaller) {
+  stop(isCaller: boolean): this {
     if (isCaller) {
       socket.emit("end", { to: this.remoteId });
     }
     this.mediaDevice.stop();
     this.pc.restartIce();
-    this.off();
+    this.off("");
 
     return this;
   }
 
-  createOffer() {
+  createOffer(): this {
     this.pc.createOffer().then(this.getDescription).catch(console.error);
-
     return this;
   }
 
-  createAnswer() {
+  createAnswer(): this {
     this.pc.createAnswer().then(this.getDescription).catch(console.error);
-
     return this;
   }
 
-  getDescription(desc) {
+  getDescription(desc: RTCSessionDescriptionInit): this {
     this.pc.setLocalDescription(desc);
-
-    socket.emit("call", { to: this.remoteId, sdp: desc });
+    const message: SignalMessage = { to: this.remoteId, sdp: desc };
+    socket.emit("call", message);
 
     return this;
   }
 
-  setRemoteDescription(desc) {
+  setRemoteDescription(desc: RTCSessionDescriptionInit): this {
     this.pc.setRemoteDescription(new RTCSessionDescription(desc));
-
     return this;
   }
 
-  addIceCandidate(candidate) {
+  addIceCandidate(candidate: RTCIceCandidateInit | null): this {
     if (candidate) {
-      this.pc.addIceCandidate(new RTCIceCandidate(candidate));
+      this.pc.addIceCandidate(new RTCIceCandidate(candidate)).catch(console.error);
     }
 
     return this;

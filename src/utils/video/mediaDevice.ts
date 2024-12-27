@@ -1,13 +1,15 @@
-import Emitter from "./Emitter";
+import Emitter from "./emitter";
 
 class MediaDevice extends Emitter {
-  start() {
+  private stream: MediaStream | null = null;
+
+  start(): this {
     navigator.mediaDevices
       .getUserMedia({
         audio: true,
         video: true,
       })
-      .then(stream => {
+      .then((stream: MediaStream) => {
         this.stream = stream;
         this.emit("stream", stream);
       })
@@ -16,23 +18,24 @@ class MediaDevice extends Emitter {
     return this;
   }
 
-  toggle(type, on) {
+
+  toggle(type: "Audio" | "Video", on?: boolean): this {
     if (this.stream) {
-      this.stream[`get${type}Tracks`]().forEach(t => {
-        t.enabled = on ? on : !t.enabled;
+      this.stream[`get${type}Tracks`]().forEach((t: MediaStreamTrack) => {
+        t.enabled = on !== undefined ? on : !t.enabled;
       });
     }
 
     return this;
   }
 
-  stop() {
+  stop(): this {
     if (this.stream) {
-      this.stream.getTracks().forEach(t => {
+      this.stream.getTracks().forEach((t: MediaStreamTrack) => {
         t.stop();
       });
     }
-    this.off();
+    this.off("");
 
     return this;
   }

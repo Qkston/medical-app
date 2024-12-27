@@ -8,12 +8,12 @@ import ProtectedRoute, { AuthProvider, useAuth } from "./components/ProtectedRou
 import PatientsTable from "./components/PatientsTable";
 import ChatWithDoctor from "./components/ChatWithDoctor";
 import SettingsPopup from "./components/SettingsPopup";
-import { VideoCall } from "./components/VideoCall/VideoCall";
-import { CallWindow } from "./components/VideoCall/CallWindow";
-import { CallModal } from "./components/VideoCall/CallModal";
+import CallModal from "./components/VideoCall/CallModal";
+import CallWindow from "./components/VideoCall/CallWindow";
+import VideoCall from "./components/VideoCall/VideoCall";
 
-import PeerConnection from "./utils/PeerConnection";
-import socket from "./utils/socket";
+import PeerConnection from "./utils/video/peerConnection";
+import socket from "./utils/video/socket";
 
 const App: React.FC = () => {
   const { checkAuth, userRole } = useAuth();
@@ -54,7 +54,7 @@ const App: React.FC = () => {
       .on("end", () => finishCall(false));
   }, [pc]);
 
-  const startCall = async (isCaller: any, remoteId: any, config: any) => {
+  const startCall = async (isCaller: boolean, remoteId: string, config: { audio: boolean; video: boolean }) => {
     setShowModal(false);
     setCalling(true);
     setConfig(config);
@@ -70,11 +70,6 @@ const App: React.FC = () => {
       .start(isCaller, config);
 
     setPc(_pc);
-  };
-
-  const rejectCall = () => {
-    socket.emit("end", { to: callFrom });
-    setShowModal(false);
   };
 
   const finishCall = (isCaller: any) => {

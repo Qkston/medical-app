@@ -15,6 +15,7 @@ import {
   RichTextField,
 } from "mui-tiptap";
 import axios from "axios";
+import { handlePatientCardLink } from "../utils/awsLinks";
 
 interface PatientCardProps {
   patientEmail: string;
@@ -41,7 +42,7 @@ const PatientCard: React.FC<PatientCardProps> = ({ patientEmail, doctorEmail }) 
 
     const fetchPatientCard = async () => {
       try {
-        const response = await axios.get("https://600uuqxerh.execute-api.eu-north-1.amazonaws.com/medical-app-staging/patient-card", {
+        const response = await axios.get(handlePatientCardLink, {
           params: { patientEmail, doctorEmail },
         });
         setContent(response.data.content || "<p>Інформація про пацієнта...</p>");
@@ -74,7 +75,7 @@ const PatientCard: React.FC<PatientCardProps> = ({ patientEmail, doctorEmail }) 
     setOpen(false);
 
     try {
-      await axios.put("https://600uuqxerh.execute-api.eu-north-1.amazonaws.com/medical-app-staging/patient-card", {
+      await axios.put(handlePatientCardLink, {
         patientEmail,
         doctorEmail,
         content: updatedContent,

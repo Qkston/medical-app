@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Switch, FormControlLabel, IconButton, Tooltip } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import axios from "axios";
+import { handleDoctorSettingsLink } from "../utils/awsLinks";
 
 export interface FeatureSettings {
   videoChatEnabled: boolean;
@@ -30,7 +31,7 @@ const SettingsPopup: React.FC = () => {
 
   const fetchSettings = async (email: string) => {
     try {
-      const response = await axios.get("https://eylhcitap2.execute-api.eu-north-1.amazonaws.com/medical-app-staging/doctor-settings", {
+      const response = await axios.get(handleDoctorSettingsLink, {
         params: { email },
       });
       setSettings(response.data?.settings);
@@ -42,7 +43,7 @@ const SettingsPopup: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put("https://eylhcitap2.execute-api.eu-north-1.amazonaws.com/medical-app-staging/doctor-settings", {
+      await axios.put(handleDoctorSettingsLink, {
         id: userId,
         settings: tempSettings,
       });

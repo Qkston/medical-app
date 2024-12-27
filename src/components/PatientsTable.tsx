@@ -17,7 +17,7 @@ import {
   TextField,
   Snackbar,
   Alert,
-	CircularProgress,
+  CircularProgress,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ArchiveIcon from "@mui/icons-material/Archive";
@@ -26,6 +26,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { archivePatientLink, getDoctorPatients, sendInviteLink } from "../utils/awsLinks";
 
 interface Patient {
   patientEmail: string;
@@ -45,7 +46,6 @@ const PatientsTable: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch patients on component mount
   useEffect(() => {
     const fetchPatients = async () => {
       try {
@@ -53,9 +53,7 @@ const PatientsTable: React.FC = () => {
         if (!user) throw new Error("No user data found in localStorage");
         const doctorId = JSON.parse(user).id;
 
-        const response = await axios.get(
-          `https://89b3040o74.execute-api.eu-north-1.amazonaws.com/medical-app-staging/get-patients?doctorId=${doctorId}`
-        );
+        const response = await axios.get(getDoctorPatients(doctorId));
         setPatients(response.data);
       } catch (error) {
         console.error("Error fetching patients:", error);
@@ -75,19 +73,16 @@ const PatientsTable: React.FC = () => {
     navigate(`/chat/${patientEmail}`);
   };
 
-  // Handle tab switching
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
-  // Open and close dialog for inviting a new patient
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
     formik.resetForm();
   };
 
-  // Formik setup for inviting new patients
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -96,14 +91,14 @@ const PatientsTable: React.FC = () => {
       email: Yup.string().email("Невірний формат електронної пошти").required("Це поле є обов'язковим"),
     }),
     onSubmit: async values => {
-      const token = generateUniqueToken();
+      const token = Math.random().toString(36).substr(2, 9);
 
       try {
         const user = localStorage.getItem("user");
         if (!user) throw new Error("No user data found in localStorage");
         const doctorId = JSON.parse(user).id;
 
-        await axios.post("https://p6qixdltrb.execute-api.eu-north-1.amazonaws.com/medical-app-staging/send-invite", {
+        await axios.post(sendInviteLink, {
           email: values.email,
           token,
           doctorId,
@@ -124,8 +119,6 @@ const PatientsTable: React.FC = () => {
     },
   });
 
-  const generateUniqueToken = () => Math.random().toString(36).substr(2, 9);
-
   const handleArchiveToggle = async (patientEmail: string, isArchived: boolean) => {
     const user = localStorage.getItem("user");
     if (!user) {
@@ -138,10 +131,10 @@ const PatientsTable: React.FC = () => {
     const doctorId = JSON.parse(user).id;
 
     try {
-      const response = await axios.post("https://6rcb2y40u2.execute-api.eu-north-1.amazonaws.com/medical-app-staging/archive-patient", {
+      const response = await axios.post(archivePatientLink, {
         doctorId,
         patientEmail,
-        isArchived: !isArchived, // Тепер змінюємо статус
+        isArchived: !isArchived,
       });
 
       if (response.data.statusCode === 200) {

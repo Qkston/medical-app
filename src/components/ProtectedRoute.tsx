@@ -2,6 +2,8 @@ import { getCurrentUser } from "aws-amplify/auth";
 import axios from "axios";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
+import { getUserRole } from "../utils/awsLinks";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 interface AuthContextType {
   isAuthenticated: boolean | null;
@@ -37,12 +39,10 @@ export const AuthProvider: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   const fetchUserRole = async (currentUserEmail: string) => {
     try {
-      const user = await axios.get(
-        `https://5cbbxrp1m3.execute-api.eu-north-1.amazonaws.com/medical-app-staging/get-user-role?email=${currentUserEmail}`
-      );
-      setUserRole(prevRole => (prevRole !== user.data.user.role ? user.data.user.role : prevRole)); // Only update if changed
-			
-			if (!localStorage.getItem("user")) localStorage.setItem("user", JSON.stringify(user.data.user))
+      const user = await axios.get(getUserRole(currentUserEmail));
+      setUserRole(prevRole => (prevRole !== user.data.user.role ? user.data.user.role : prevRole));
+
+      if (!localStorage.getItem("user")) localStorage.setItem("user", JSON.stringify(user.data.user));
     } catch (error) {
       console.error("Error fetching user role", error);
     }
@@ -66,7 +66,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles 
   const { isAuthenticated, userRole } = useAuth();
 
   if (isAuthenticated === null) {
-    return <div>Loading...</div>;
+    return (
+      <Backdrop sx={theme => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })} open={isAuthenticated === null}>
+        <CircularProgress />
+      </Backdrop>
+    );
   }
 
   if (!isAuthenticated) {

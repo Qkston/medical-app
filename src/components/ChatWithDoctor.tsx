@@ -5,6 +5,7 @@ import moment from "moment";
 import axios from "axios";
 import PatientCard from "./PatientCard";
 import { FeatureSettings } from "./SettingsPopup";
+import { chatWebsocketLink, doctorSettingsLink, getMessagesLink } from "../utils/awsLinks";
 
 interface Message {
   sender: string;
@@ -40,9 +41,7 @@ const ChatWithDoctor: React.FC = () => {
     setUser(user);
     setReceiverEmail(user.role === "doctor" ? patientEmail : user.doctorEmail || "");
 
-    const ws = new WebSocket(
-      `wss://qf54sqdth8.execute-api.eu-north-1.amazonaws.com/staging?userType=${user.role}&email=${encodeURIComponent(user.email)}`
-    );
+    const ws = new WebSocket(chatWebsocketLink(user.role, user.email));
     ws.onopen = () => console.log("WebSocket connected");
     ws.onmessage = event => setMessages(prev => [...prev, JSON.parse(event.data)]);
     ws.onerror = error => console.error("WebSocket error:", error);
@@ -56,7 +55,7 @@ const ChatWithDoctor: React.FC = () => {
 
   useEffect(() => {
     const fetchSettings = async () => {
-      const response = await axios.get("https://eylhcitap2.execute-api.eu-north-1.amazonaws.com/medical-app-staging/doctor-settings", {
+      const response = await axios.get(doctorSettingsLink, {
         params: { email: user?.role === "doctor" ? user.email : user?.doctorEmail },
       });
       setSettings(response.data?.settings);
@@ -68,7 +67,7 @@ const ChatWithDoctor: React.FC = () => {
   useEffect(() => {
     const fetchChatHistory = async () => {
       try {
-        const response = await axios.get(`https://ulhd97krhl.execute-api.eu-north-1.amazonaws.com/medical-app-staging/get-messages`, {
+        const response = await axios.get(getMessagesLink, {
           params: { userEmail: user!.email, companionEmail: receiverEmail },
         });
 
