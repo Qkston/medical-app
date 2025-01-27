@@ -4,8 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
 import PatientCard from "./PatientCard";
-import { FeatureSettings } from "./SettingsPopup";
-import { chatWebsocketLink, doctorSettingsLink, getMessagesLink } from "../utils/awsLinks";
+import { chatWebsocketLink, doctorSettingsLink, getMessagesLink } from "../../utils/api/awsLinks";
+import { FeatureSettings } from "../Settings/SettingsPopup";
 
 interface Message {
   sender: string;

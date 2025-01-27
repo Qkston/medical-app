@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { Button, TextField, Typography, Snackbar, Alert, Box, Container } from "@mui/material";
 import axios from "axios";
 import { confirmSignUp, signUp } from "aws-amplify/auth";
-import { savePatientLink } from "../utils/awsLinks";
+import { savePatientLink } from "../../utils/api/awsLinks";
 
 interface RegisterValues {
   password: string;

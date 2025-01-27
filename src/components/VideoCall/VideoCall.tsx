@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Alert, Box, Button, CircularProgress, Snackbar, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { sendVideocallInviteLink } from "../../utils/awsLinks";
+import { sendVideocallInviteLink } from "../../utils/api/awsLinks";
 import socket from "../../utils/video/socket";
 
 const VideoCall = ({

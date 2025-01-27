@@ -6,7 +6,7 @@ import { confirmSignUp, signIn, signUp } from "aws-amplify/auth";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "./ProtectedRoute";
-import { saveDoctorLink } from "../utils/awsLinks";
+import { saveDoctorLink } from "../../utils/api/awsLinks";
 
 interface AuthValues {
   email: string;

@@ -2,7 +2,7 @@ import { getCurrentUser } from "aws-amplify/auth";
 import axios from "axios";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { getUserRole } from "../utils/awsLinks";
+import { getUserRole } from "../../utils/api/awsLinks";
 import { Backdrop, CircularProgress } from "@mui/material";
 
 interface AuthContextType {

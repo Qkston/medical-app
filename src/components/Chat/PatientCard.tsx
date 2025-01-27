@@ -15,7 +15,7 @@ import {
   RichTextField,
 } from "mui-tiptap";
 import axios from "axios";
-import { handlePatientCardLink } from "../utils/awsLinks";
+import { handlePatientCardLink } from "../../utils/api/awsLinks";
 
 interface PatientCardProps {
   patientEmail: string;
