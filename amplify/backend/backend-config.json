@@ -1,6 +1,6 @@
 {
   "auth": {
-    "medicalapp5a2f2d55": {
+    "medicalapp8e6dbb51": {
       "customAuth": false,
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
@@ -9,91 +9,35 @@
     }
   },
   "parameters": {
-    "AMPLIFY_auth_medicalapp5a2f2d55_allowUnauthenticatedIdentities": {
+    "AMPLIFY_auth_medicalapp8e6dbb51_nativeClientId": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "medicalapp5a2f2d55"
+          "resourceName": "medicalapp8e6dbb51"
         }
       ]
     },
-    "AMPLIFY_auth_medicalapp5a2f2d55_authRoleArn": {
+    "AMPLIFY_auth_medicalapp8e6dbb51_userPoolId": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "medicalapp5a2f2d55"
+          "resourceName": "medicalapp8e6dbb51"
         }
       ]
     },
-    "AMPLIFY_auth_medicalapp5a2f2d55_authRoleName": {
+    "AMPLIFY_auth_medicalapp8e6dbb51_userPoolName": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "medicalapp5a2f2d55"
+          "resourceName": "medicalapp8e6dbb51"
         }
       ]
     },
-    "AMPLIFY_auth_medicalapp5a2f2d55_identityPoolId": {
+    "AMPLIFY_auth_medicalapp8e6dbb51_webClientId": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "medicalapp5a2f2d55"
-        }
-      ]
-    },
-    "AMPLIFY_auth_medicalapp5a2f2d55_identityPoolName": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "medicalapp5a2f2d55"
-        }
-      ]
-    },
-    "AMPLIFY_auth_medicalapp5a2f2d55_nativeClientId": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "medicalapp5a2f2d55"
-        }
-      ]
-    },
-    "AMPLIFY_auth_medicalapp5a2f2d55_unauthRoleArn": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "medicalapp5a2f2d55"
-        }
-      ]
-    },
-    "AMPLIFY_auth_medicalapp5a2f2d55_unauthRoleName": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "medicalapp5a2f2d55"
-        }
-      ]
-    },
-    "AMPLIFY_auth_medicalapp5a2f2d55_userPoolId": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "medicalapp5a2f2d55"
-        }
-      ]
-    },
-    "AMPLIFY_auth_medicalapp5a2f2d55_userPoolName": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "medicalapp5a2f2d55"
-        }
-      ]
-    },
-    "AMPLIFY_auth_medicalapp5a2f2d55_webClientId": {
-      "usedBy": [
-        {
-          "category": "auth",
-          "resourceName": "medicalapp5a2f2d55"
+          "resourceName": "medicalapp8e6dbb51"
         }
       ]
     },

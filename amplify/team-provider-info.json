@@ -54,18 +54,11 @@
         }
       },
       "auth": {
-        "medicalapp5a2f2d55": {
-          "userPoolId": "eu-north-1_iJwlKTjnw",
-          "userPoolName": "medicalapp9576b42c_userpool_9576b42c-staging",
-          "webClientId": "17gmvj46km2prli3nqm0nibb4f",
-          "nativeClientId": "4jarrv6j57b79pfab0p8efgarc",
-          "identityPoolId": "eu-north-1:0c59efdd-15ea-4196-b8b2-3194852f1c29",
-          "identityPoolName": "medicalapp9576b42c_identitypool_9576b42c__staging",
-          "allowUnauthenticatedIdentities": false,
-          "authRoleArn": "arn:aws:iam::151407415172:role/amplify-medicalapp-staging-068da-authRole",
-          "authRoleName": "amplify-medicalapp-staging-068da-authRole",
-          "unauthRoleArn": "arn:aws:iam::151407415172:role/amplify-medicalapp-staging-068da-unauthRole",
-          "unauthRoleName": "amplify-medicalapp-staging-068da-unauthRole"
+        "medicalapp8e6dbb51": {
+          "userPoolId": "eu-north-1_r6zBega1s",
+          "userPoolName": "medicalapp9576b42c_userpool_9576b42c-dev",
+          "webClientId": "1f97us5rvh9lq4692aojjd4tj9",
+          "nativeClientId": "7hda2hcab9u5r0tnlar0kglq69"
         }
       }
     }
