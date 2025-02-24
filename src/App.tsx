@@ -5,9 +5,9 @@ import { AppBar, Toolbar, Button, Typography, Container, Box, CircularProgress }
 import AuthComponent from "./components/Auth/Auth";
 import RegisterPatient from "./components/Auth/RegisterPatient";
 import ProtectedRoute, { AuthProvider, useAuth } from "./components/Auth/ProtectedRoute";
-import PatientsTable from "./components/PatientsTable";
+import PatientsTable from "./components/Patients/PatientsTable";
 import ChatWithDoctor from "./components/Chat/ChatWithDoctor";
-import SettingsPopup from "./components/SettingsPopup";
+import SettingsPopup from "./components/Settings/SettingsPopup";
 import CallModal from "./components/VideoCall/CallModal";
 import CallWindow from "./components/VideoCall/CallWindow";
 import VideoCall from "./components/VideoCall/VideoCall";

@@ -1,30 +1,365 @@
 {
   "auth": {
-    "medicalapp9576b42c": {
+    "medicalapp5a2f2d55": {
       "customAuth": false,
       "dependsOn": [],
-      "frontendAuthConfig": {
-        "mfaConfiguration": "OFF",
-        "mfaTypes": [
-          "SMS"
-        ],
-        "passwordProtectionSettings": {
-          "passwordPolicyCharacters": [],
-          "passwordPolicyMinLength": 8
-        },
-        "signupAttributes": [
-          "EMAIL"
-        ],
-        "socialProviders": [],
-        "usernameAttributes": [
-          "EMAIL"
-        ],
-        "verificationMechanisms": [
-          "EMAIL"
-        ]
-      },
       "providerPlugin": "awscloudformation",
-      "service": "Cognito"
+      "service": "Cognito",
+      "serviceType": "imported"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_auth_medicalapp5a2f2d55_allowUnauthenticatedIdentities": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "medicalapp5a2f2d55"
+        }
+      ]
+    },
+    "AMPLIFY_auth_medicalapp5a2f2d55_authRoleArn": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "medicalapp5a2f2d55"
+        }
+      ]
+    },
+    "AMPLIFY_auth_medicalapp5a2f2d55_authRoleName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "medicalapp5a2f2d55"
+        }
+      ]
+    },
+    "AMPLIFY_auth_medicalapp5a2f2d55_identityPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "medicalapp5a2f2d55"
+        }
+      ]
+    },
+    "AMPLIFY_auth_medicalapp5a2f2d55_identityPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "medicalapp5a2f2d55"
+        }
+      ]
+    },
+    "AMPLIFY_auth_medicalapp5a2f2d55_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "medicalapp5a2f2d55"
+        }
+      ]
+    },
+    "AMPLIFY_auth_medicalapp5a2f2d55_unauthRoleArn": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "medicalapp5a2f2d55"
+        }
+      ]
+    },
+    "AMPLIFY_auth_medicalapp5a2f2d55_unauthRoleName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "medicalapp5a2f2d55"
+        }
+      ]
+    },
+    "AMPLIFY_auth_medicalapp5a2f2d55_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "medicalapp5a2f2d55"
+        }
+      ]
+    },
+    "AMPLIFY_auth_medicalapp5a2f2d55_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "medicalapp5a2f2d55"
+        }
+      ]
+    },
+    "AMPLIFY_auth_medicalapp5a2f2d55_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "medicalapp5a2f2d55"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ChatMessages_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ChatMessages"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ChatMessages_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ChatMessages"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ChatMessages_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ChatMessages"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ChatMessages_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ChatMessages"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ChatMessages_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ChatMessages"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ChatMessages_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ChatMessages"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ChatMessages_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ChatMessages"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Doctors_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Doctors"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Doctors_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Doctors"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Doctors_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Doctors"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Doctors_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Doctors"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Doctors_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Doctors"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Doctors_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Doctors"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Doctors_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Doctors"
+        }
+      ]
+    },
+    "AMPLIFY_storage_PatientCards_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "PatientCards"
+        }
+      ]
+    },
+    "AMPLIFY_storage_PatientCards_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "PatientCards"
+        }
+      ]
+    },
+    "AMPLIFY_storage_PatientCards_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "PatientCards"
+        }
+      ]
+    },
+    "AMPLIFY_storage_PatientCards_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "PatientCards"
+        }
+      ]
+    },
+    "AMPLIFY_storage_PatientCards_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "PatientCards"
+        }
+      ]
+    },
+    "AMPLIFY_storage_WebSocketConnections_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "WebSocketConnections"
+        }
+      ]
+    },
+    "AMPLIFY_storage_WebSocketConnections_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "WebSocketConnections"
+        }
+      ]
+    },
+    "AMPLIFY_storage_WebSocketConnections_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "WebSocketConnections"
+        }
+      ]
+    },
+    "AMPLIFY_storage_WebSocketConnections_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "WebSocketConnections"
+        }
+      ]
+    },
+    "AMPLIFY_storage_WebSocketConnections_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "WebSocketConnections"
+        }
+      ]
+    },
+    "AMPLIFY_storage_users_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "users"
+        }
+      ]
+    },
+    "AMPLIFY_storage_users_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "users"
+        }
+      ]
+    },
+    "AMPLIFY_storage_users_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "users"
+        }
+      ]
+    },
+    "AMPLIFY_storage_users_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "users"
+        }
+      ]
+    },
+    "AMPLIFY_storage_users_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "users"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "ChatMessages": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB",
+      "serviceType": "imported"
+    },
+    "Doctors": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB",
+      "serviceType": "imported"
+    },
+    "PatientCards": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB",
+      "serviceType": "imported"
+    },
+    "WebSocketConnections": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB",
+      "serviceType": "imported"
+    },
+    "users": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB",
+      "serviceType": "imported"
     }
   }
 }

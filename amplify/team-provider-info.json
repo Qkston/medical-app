@@ -12,8 +12,61 @@
       "AmplifyAppId": "d23mkt96kzjw55"
     },
     "categories": {
+      "storage": {
+        "Doctors": {
+          "tableName": "Doctors",
+          "region": "eu-north-1",
+          "arn": "arn:aws:dynamodb:eu-north-1:151407415172:table/Doctors",
+          "partitionKeyName": "doctorId",
+          "partitionKeyType": "S",
+          "sortKeyName": "patientEmail",
+          "sortKeyType": "S"
+        },
+        "ChatMessages": {
+          "tableName": "ChatMessages",
+          "region": "eu-north-1",
+          "arn": "arn:aws:dynamodb:eu-north-1:151407415172:table/ChatMessages",
+          "partitionKeyName": "connectionId",
+          "partitionKeyType": "S",
+          "sortKeyName": "timestamp",
+          "sortKeyType": "S"
+        },
+        "PatientCards": {
+          "tableName": "PatientCards",
+          "region": "eu-north-1",
+          "arn": "arn:aws:dynamodb:eu-north-1:151407415172:table/PatientCards",
+          "partitionKeyName": "patientEmail",
+          "partitionKeyType": "S"
+        },
+        "WebSocketConnections": {
+          "tableName": "WebSocketConnections",
+          "region": "eu-north-1",
+          "arn": "arn:aws:dynamodb:eu-north-1:151407415172:table/WebSocketConnections",
+          "partitionKeyName": "connectionId",
+          "partitionKeyType": "S"
+        },
+        "users": {
+          "tableName": "users",
+          "region": "eu-north-1",
+          "arn": "arn:aws:dynamodb:eu-north-1:151407415172:table/users",
+          "partitionKeyName": "id",
+          "partitionKeyType": "S"
+        }
+      },
       "auth": {
-        "medicalapp9576b42c": {}
+        "medicalapp5a2f2d55": {
+          "userPoolId": "eu-north-1_iJwlKTjnw",
+          "userPoolName": "medicalapp9576b42c_userpool_9576b42c-staging",
+          "webClientId": "17gmvj46km2prli3nqm0nibb4f",
+          "nativeClientId": "4jarrv6j57b79pfab0p8efgarc",
+          "identityPoolId": "eu-north-1:0c59efdd-15ea-4196-b8b2-3194852f1c29",
+          "identityPoolName": "medicalapp9576b42c_identitypool_9576b42c__staging",
+          "allowUnauthenticatedIdentities": false,
+          "authRoleArn": "arn:aws:iam::151407415172:role/amplify-medicalapp-staging-068da-authRole",
+          "authRoleName": "amplify-medicalapp-staging-068da-authRole",
+          "unauthRoleArn": "arn:aws:iam::151407415172:role/amplify-medicalapp-staging-068da-unauthRole",
+          "unauthRoleName": "amplify-medicalapp-staging-068da-unauthRole"
+        }
       }
     }
   },

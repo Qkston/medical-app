@@ -28,3 +28,11 @@ A modern web application for medical services built with React and AWS Amplify.
 - Node.js (v16 or higher)
 - npm or yarn
 - AWS account (for Amplify services)
+
+
+## TODO
+
+- [ ] Оновити імпортовані таблиці бази даних в @amplify/backend/storage папці
+- [ ] Перенести лямбда функції в @amplify/backend/function папку
+- [ ] Перенести налаштування API Gateway в @amplify/backend/api папку
+- [ ] Сформувати тестовий стенд для тестування amplify build перед деплоєм

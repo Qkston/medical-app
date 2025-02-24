@@ -26,7 +26,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { archivePatientLink, getDoctorPatients, sendInviteLink } from "../utils/awsLinks";
+import { archivePatientLink, getDoctorPatients, sendInviteLink } from "../../utils/api/awsLinks";
 
 interface Patient {
   patientEmail: string;

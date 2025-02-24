@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Switch, FormControlLabel, IconButton, Tooltip } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import axios from "axios";
-import { handleDoctorSettingsLink } from "../utils/awsLinks";
+import { handleDoctorSettingsLink } from "../../utils/api/awsLinks";
 
 export interface FeatureSettings {
   videoChatEnabled: boolean;
