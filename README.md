@@ -36,3 +36,10 @@ A modern web application for medical services built with React and AWS Amplify.
 - [ ] Перенести лямбда функції в @amplify/backend/function папку
 - [ ] Перенести налаштування API Gateway в @amplify/backend/api папку
 - [ ] Сформувати тестовий стенд для тестування amplify build перед деплоєм
+
+### Patient Card functionality
+
+- [ ] Оновити таким чином, щоб це була форма, а не редактор текстку
+- [ ] Для кожного виклику створювати нову форму
+- [ ] Виділити основні поля, які потрібно заповнити
+- [ ] Продумати збереження та оновлення даних

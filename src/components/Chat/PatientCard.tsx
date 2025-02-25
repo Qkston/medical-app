@@ -22,11 +22,6 @@ interface PatientCardProps {
   doctorEmail: string;
 }
 
-// Оновити таким чином, щоб це була форма, а не редактор текстку
-// Для кожного виклику створити нову форму
-// Виділити основні поля, які потрібно заповнити
-// Продумати збереження та оновлення даних
-
 const PatientCard: React.FC<PatientCardProps> = ({ patientEmail, doctorEmail }) => {
   const [open, setOpen] = useState(false);
   const [userRole, setUserRole] = useState<"doctor" | "patient" | null>(null);
