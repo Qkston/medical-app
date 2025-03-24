@@ -1,0 +1,113 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Parameters": {
+    "tableName": {
+      "Type": "String",
+      "Default": "WebSocketConnections"
+    },
+    "partitionKeyName": {
+      "Type": "String",
+      "Default": "connectionId"
+    },
+    "partitionKeyType": {
+      "Type": "String",
+      "Default": "S"
+    },
+    "env": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "ImportedDynamoDBTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {
+          "Fn::If": [
+            "ShouldUseTableName",
+            {
+              "Ref": "tableName"
+            },
+            {
+              "Fn::Join": [
+                "-",
+                [
+                  "WebSocketConnections",
+                  {
+                    "Ref": "env"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "KeySchema": [
+          {
+            "AttributeName": {
+              "Ref": "partitionKeyName"
+            },
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": {
+              "Ref": "partitionKeyName"
+            },
+            "AttributeType": {
+              "Ref": "partitionKeyType"
+            }
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "TableClass": "STANDARD"
+      }
+    }
+  },
+  "Conditions": {
+    "ShouldUseTableName": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "tableName"
+            },
+            ""
+          ]
+        }
+      ]
+    }
+  },
+  "Outputs": {
+    "Name": {
+      "Value": {
+        "Ref": "ImportedDynamoDBTable"
+      }
+    },
+    "Arn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ImportedDynamoDBTable",
+          "Arn"
+        ]
+      }
+    },
+    "StreamArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ImportedDynamoDBTable",
+          "StreamArn"
+        ]
+      }
+    },
+    "PartitionKeyName": {
+      "Value": {
+        "Ref": "partitionKeyName"
+      }
+    },
+    "PartitionKeyType": {
+      "Value": {
+        "Ref": "partitionKeyType"
+      }
+    }
+  }
+} 

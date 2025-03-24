@@ -1,0 +1,3 @@
+{
+  "ImportedDynamoDBTable": "arn:aws:dynamodb:eu-north-1:151407415172:table/users"
+} 

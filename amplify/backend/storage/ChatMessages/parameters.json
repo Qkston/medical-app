@@ -1,4 +1,10 @@
 {
   "resourceName": "ChatMessages",
-  "serviceType": "imported"
+  "serviceType": "imported",
+  "tableName": "ChatMessages",
+  "partitionKeyName": "connectionId",
+  "partitionKeyType": "S",
+  "sortKeyName": "timestamp",
+  "sortKeyType": "S",
+  "region": "eu-north-1"
 }
