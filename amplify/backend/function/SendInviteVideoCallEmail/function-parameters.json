@@ -1,0 +1,18 @@
+{
+  "lambdaLayers": [],
+  "environmentVariables": {},
+  "runtime": "nodejs18.x",
+  "handler": "index.handler",
+  "memorySize": 128,
+  "timeout": 3,
+  "permissions": {
+    "api": {
+      "POST /send-videocall-invite": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  }
+}

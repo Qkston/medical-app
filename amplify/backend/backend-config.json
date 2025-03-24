@@ -8,6 +8,206 @@
       "serviceType": "imported"
     }
   },
+  "function": {
+    "ArchivePatient": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "Doctors"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "DoctorSettingsHandling": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "users"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "GetMessages": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "ChatMessages"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "GetPatients": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "Doctors"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "MessagingConnect": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "WebSocketConnections"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "MessagingDisconnect": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "WebSocketConnections"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "MessagingSendMessage": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "WebSocketConnections"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "ChatMessages"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "PatientCardHandling": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "PatientCards"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "PutPatients": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "Doctors"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "SaveUser": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "users"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "SendInviteEmail": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "SendInviteVideoCallEmail": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "VideoCallSendMessage": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "WebSocketConnections"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "getUserRole": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "users"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
   "parameters": {
     "AMPLIFY_auth_medicalapp8e6dbb51_nativeClientId": {
       "usedBy": [
@@ -38,6 +238,230 @@
         {
           "category": "auth",
           "resourceName": "medicalapp8e6dbb51"
+        }
+      ]
+    },
+    "AMPLIFY_function_ArchivePatient_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "ArchivePatient"
+        }
+      ]
+    },
+    "AMPLIFY_function_ArchivePatient_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "ArchivePatient"
+        }
+      ]
+    },
+    "AMPLIFY_function_DoctorSettingsHandling_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "DoctorSettingsHandling"
+        }
+      ]
+    },
+    "AMPLIFY_function_DoctorSettingsHandling_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "DoctorSettingsHandling"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetMessages_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetMessages"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetMessages_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetMessages"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetPatients_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetPatients"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetPatients_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetPatients"
+        }
+      ]
+    },
+    "AMPLIFY_function_MessagingConnect_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "MessagingConnect"
+        }
+      ]
+    },
+    "AMPLIFY_function_MessagingConnect_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "MessagingConnect"
+        }
+      ]
+    },
+    "AMPLIFY_function_MessagingDisconnect_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "MessagingDisconnect"
+        }
+      ]
+    },
+    "AMPLIFY_function_MessagingDisconnect_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "MessagingDisconnect"
+        }
+      ]
+    },
+    "AMPLIFY_function_MessagingSendMessage_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "MessagingSendMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_MessagingSendMessage_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "MessagingSendMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_PatientCardHandling_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "PatientCardHandling"
+        }
+      ]
+    },
+    "AMPLIFY_function_PatientCardHandling_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "PatientCardHandling"
+        }
+      ]
+    },
+    "AMPLIFY_function_PutPatients_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "PutPatients"
+        }
+      ]
+    },
+    "AMPLIFY_function_PutPatients_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "PutPatients"
+        }
+      ]
+    },
+    "AMPLIFY_function_SaveUser_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "SaveUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_SaveUser_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "SaveUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_SendInviteEmail_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "SendInviteEmail"
+        }
+      ]
+    },
+    "AMPLIFY_function_SendInviteEmail_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "SendInviteEmail"
+        }
+      ]
+    },
+    "AMPLIFY_function_SendInviteVideoCallEmail_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "SendInviteVideoCallEmail"
+        }
+      ]
+    },
+    "AMPLIFY_function_SendInviteVideoCallEmail_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "SendInviteVideoCallEmail"
+        }
+      ]
+    },
+    "AMPLIFY_function_VideoCallSendMessage_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "VideoCallSendMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_VideoCallSendMessage_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "VideoCallSendMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_getUserRole_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getUserRole"
+        }
+      ]
+    },
+    "AMPLIFY_function_getUserRole_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getUserRole"
         }
       ]
     },

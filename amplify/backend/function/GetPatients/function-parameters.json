@@ -1,0 +1,26 @@
+{
+  "lambdaLayers": [],
+  "environmentVariables": {},
+  "runtime": "nodejs16.x",
+  "handler": "index.handler",
+  "memorySize": 128,
+  "timeout": 3,
+  "permissions": {
+    "api": {
+      "GET /get-patients": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "storage": {
+      "Doctors": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  }
+}

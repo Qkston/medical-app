@@ -1,0 +1,32 @@
+{
+  "lambdaLayers": [],
+  "environmentVariables": {},
+  "runtime": "nodejs18.x",
+  "handler": "index.handler",
+  "memorySize": 128,
+  "timeout": 3,
+  "permissions": {
+    "api": {
+      "messaging": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+			"videocall": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "storage": {
+      "WebSocketConnections": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  }
+}

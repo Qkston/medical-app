@@ -1,0 +1,26 @@
+{
+  "lambdaLayers": [],
+  "environmentVariables": {},
+  "runtime": "nodejs22.x",
+  "handler": "index.handler",
+  "memorySize": 128,
+  "timeout": 3,
+  "permissions": {
+    "api": {
+      "D:/Programs/Git/patient-card": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "storage": {
+      "PatientCards": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "lambdaLayers": [],
+  "environmentVariables": {},
+  "runtime": "nodejs18.x",
+  "handler": "index.handler",
+  "memorySize": 128,
+  "timeout": 3,
+  "permissions": {
+    "api": {
+      "GET /get-messages": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "storage": {
+      "ChatMessages": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  }
+}

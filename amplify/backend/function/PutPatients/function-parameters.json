@@ -1,0 +1,18 @@
+{
+  "lambdaLayers": [],
+  "environmentVariables": {},
+  "runtime": "nodejs16.x",
+  "handler": "index.handler",
+  "memorySize": 128,
+  "timeout": 3,
+  "permissions": {
+    "api": {
+      "POST /save-patient": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  }
+}
