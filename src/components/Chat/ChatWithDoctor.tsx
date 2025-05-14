@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, TextField, Button, Typography, List, ListItem, Paper, Backdrop, CircularProgress } from "@mui/material";
+import { Box, TextField, Button, Typography, List, ListItem, Paper, Backdrop, CircularProgress, IconButton, Chip, Avatar, Dialog, DialogContent } from "@mui/material";
+import { AttachFile as AttachFileIcon, Send as SendIcon } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
@@ -9,8 +10,12 @@ import { FeatureSettings } from "../Settings/SettingsPopup";
 
 interface Message {
   sender: string;
-  message: string;
+  message?: string;
   timestamp?: string;
+  fileData?: string;
+  fileName?: string;
+  fileType?: string;
+  attachments?: { fileName: string; fileType: string; fileSize: number; previewURL: string }[];
 }
 
 interface User {
@@ -20,6 +25,9 @@ interface User {
   id: string;
   role: "patient" | "doctor";
 }
+
+// Attachment type to hold file and its preview URL
+interface Attachment { file: File; previewURL: string; }
 
 const ChatWithDoctor: React.FC = () => {
   const { patientEmail } = useParams<{ patientEmail: string }>();
@@ -32,6 +40,14 @@ const ChatWithDoctor: React.FC = () => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [receiverEmail, setReceiverEmail] = useState<string>("");
   const [settings, setSettings] = useState<FeatureSettings | null>();
+  const [selectedFiles, setSelectedFiles] = useState<Attachment[]>([]);
+  const [fileError, setFileError] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [previewSrc, setPreviewSrc] = useState<string>("");
+
+	const openImagePreview = (src: string) => { setPreviewSrc(src); setIsPreviewOpen(true); };
+  const closeImagePreview = () => { setIsPreviewOpen(false); setPreviewSrc(""); };
 
   useEffect(() => {
     const userRecord = localStorage.getItem("user");
@@ -89,6 +105,12 @@ const ChatWithDoctor: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    return () => {
+      selectedFiles.forEach(att => URL.revokeObjectURL(att.previewURL));
+    };
+  }, []);
+
   const sendMessage = (message: string) => {
     if (socket && socket.readyState === WebSocket.OPEN) {
       socket.send(
@@ -113,6 +135,105 @@ const ChatWithDoctor: React.FC = () => {
   const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  const handleAttachClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files);
+      const maxSize = 10 * 1024 * 1024; // 10MB
+      const maxCount = 5;
+      let errorMsg = "";
+      const validAttachments: Attachment[] = [];
+      for (const file of filesArray) {
+        if (selectedFiles.length + validAttachments.length >= maxCount) {
+          errorMsg = "Максимальна кількість файлів — 5";
+          break;
+        }
+        if (file.size > maxSize) {
+          errorMsg = "Файл перевищує максимально дозволений розмір 10МБ";
+          continue;
+        }
+        validAttachments.push({ file, previewURL: URL.createObjectURL(file) });
+      }
+      setFileError(errorMsg);
+      if (validAttachments.length) setSelectedFiles(prev => [...prev, ...validAttachments]);
+      e.target.value = "";
+    }
+  };
+
+  const handleSend = async () => {
+    if (selectedFiles.length > 0) {
+      if (!socket || socket.readyState !== WebSocket.OPEN) {
+        setFileError("Не вдалося відправити файл. Спробуйте ще раз");
+        return;
+      }
+      const timestamp = new Date().toISOString();
+      const hasText = message.trim() !== "";
+      // Push combined message with text + attachments
+      if (hasText) {
+        setMessages(prev => [
+          ...prev,
+          {
+            sender: user?.email,
+            message: message,
+            timestamp,
+            attachments: selectedFiles.map(att => ({
+              fileName: att.file.name,
+              fileType: att.file.type,
+              fileSize: att.file.size,
+              previewURL: att.previewURL,
+            })),
+          } as Message,
+        ]);
+      }
+      // Send each file and optionally push attachments-only if no text
+      for (const att of selectedFiles) {
+        try {
+          const dataUrl = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = () => reject("Помилка читання файлу");
+            reader.readAsDataURL(att.file);
+          });
+          socket.send(
+            JSON.stringify({
+              action: "sendFile",
+              fileName: att.file.name,
+              fileType: att.file.type,
+              fileSize: att.file.size,
+              fileData: dataUrl,
+              recipientEmail: receiverEmail,
+            })
+          );
+          if (!hasText && user?.email) {
+            // attachments-only bubble
+            const newMsg: Message = {
+              sender: user.email,
+              fileName: att.file.name,
+              fileType: att.file.type,
+              fileData: dataUrl,
+              timestamp,
+            };
+            setMessages(prev => [...prev, newMsg]);
+          }
+        } catch (err) {
+          setFileError("Не вдалося відправити файл. Спробуйте ще раз");
+        }
+      }
+      // Send text message if present
+      if (hasText) sendMessage(message);
+      // Cleanup
+      setMessage("");
+      selectedFiles.forEach(att => URL.revokeObjectURL(att.previewURL));
+      setSelectedFiles([]);
+      setFileError("");
+    } else {
       handleSendMessage();
     }
   };
@@ -187,25 +308,116 @@ const ChatWithDoctor: React.FC = () => {
                           }}>
                           {moment(msg.timestamp).format("MMMM DD, HH:mm:ss")}
                         </Typography>
-                        <Typography variant="body2">{msg.message}</Typography>
+                        {msg.attachments ? (
+                          <> 
+                            {msg.message && <Typography variant="body2" sx={{ marginBottom: 1 }}>{msg.message}</Typography>}
+                            {msg.attachments.map((att, i) => (
+                              att.fileType.startsWith("image/") ? (
+                                <Box
+                                  key={i}
+                                  component="img"
+                                  src={att.previewURL}
+                                  alt={att.fileName}
+                                  sx={{ maxWidth: "200px", maxHeight: "200px", cursor: "pointer", mb: 1 }}
+                                  onClick={() => openImagePreview(att.previewURL)}
+                                />
+                              ) : (
+                                <Box key={i} sx={{ mb: 1 }}>
+                                  <a href={att.previewURL} download={att.fileName} style={{ textDecoration: "none", color: "#1976d2" }}>
+                                    {att.fileName}
+                                  </a>
+                                </Box>
+                              )
+                            ))}
+                          </>
+                        ) : msg.fileData && msg.fileType ? (
+                          msg.fileType.startsWith("image/") ? (
+                            <Box
+                              component="img"
+                              src={msg.fileData}
+                              alt={msg.fileName}
+                              sx={{ maxWidth: "200px", maxHeight: "200px", cursor: "pointer" }}
+                              onClick={() => openImagePreview(msg.fileData!)}
+                            />
+                          ) : (
+                            <Box>
+                              <a href={msg.fileData} download={msg.fileName} style={{ textDecoration: "none", color: "#1976d2" }}>
+                                {msg.fileName}
+                              </a>
+                            </Box>
+                          )
+                        ) : (
+                          <Typography variant="body2">{msg.message}</Typography>
+                        )}
                       </Paper>
                     </ListItem>
                   ))}
                 <div ref={messagesEndRef} />
               </List>
             </Box>
-            <Box sx={{ display: "flex" }}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                value={message}
-                onChange={e => setMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Напишіть повідомлення..."
-              />
-              <Button onClick={handleSendMessage} variant="contained" color="primary" sx={{ marginLeft: 2 }}>
-                Відправити
-              </Button>
+            <Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  p: 1,
+                  border: "1px solid",
+                  borderColor: "divider",
+                  borderRadius: 2,
+                  gap: 1,
+                }}>
+                <IconButton color="primary" onClick={handleAttachClick}>
+                  <AttachFileIcon />
+                </IconButton>
+                <input
+                  type="file"
+                  hidden
+                  multiple
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  accept=".pdf,image/*,.docx"
+                />
+                <TextField
+                  value={message}
+                  onChange={e => setMessage(e.target.value)}
+                  onKeyDown={handleKeyPress}
+                  placeholder="Напишіть повідомлення..."
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    flexGrow: 1,
+                    "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+                  }}
+                />
+                <IconButton
+                  color="primary"
+                  onClick={handleSend}
+                  disabled={!message.trim() && selectedFiles.length === 0}>
+                  <SendIcon />
+                </IconButton>
+              </Box>
+              {(selectedFiles.length > 0 || fileError) && (
+                <Box sx={{ mt: 1, display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+                  {selectedFiles.map((att, idx) => (
+                    <Chip
+                      key={idx}
+                      clickable={att.file.type.startsWith("image/")}
+                      onClick={att.file.type.startsWith("image/") ? () => openImagePreview(att.previewURL) : undefined}
+                      avatar={att.file.type.startsWith("image/") ? <Avatar src={att.previewURL} /> : undefined}
+                      icon={!att.file.type.startsWith("image/") ? <AttachFileIcon /> : undefined}
+                      label={att.file.name}
+                      onDelete={() => { URL.revokeObjectURL(att.previewURL); setSelectedFiles(prev => prev.filter((_, i) => i !== idx)); setFileError(""); }}
+                      variant="outlined"
+                      sx={{ maxWidth: "200px" }}
+                    />
+                  ))}
+                  {fileError && (
+                    <Typography color="error" variant="caption">
+                      {fileError}
+                    </Typography>
+                  )}
+                </Box>
+              )}
             </Box>
           </Box>
           {settings?.patientCardsEnabled && (
@@ -216,6 +428,17 @@ const ChatWithDoctor: React.FC = () => {
           )}
         </Box>
       )}
+      {/* Image preview dialog */}
+      <Dialog open={isPreviewOpen} onClose={closeImagePreview} maxWidth="lg" fullWidth>
+        <DialogContent sx={{ p: 0, backgroundColor: 'black' }}>
+          <Box
+            component="img"
+            src={previewSrc}
+            alt="Preview"
+            sx={{ width: '100%', height: 'auto' }}
+          />
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };
