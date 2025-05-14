@@ -11,159 +11,51 @@
   "function": {
     "ArchivePatient": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "storage",
-          "resourceName": "Doctors"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "DoctorSettingsHandling": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "storage",
-          "resourceName": "users"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "GetMessages": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "storage",
-          "resourceName": "ChatMessages"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "GetPatients": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "storage",
-          "resourceName": "Doctors"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "MessagingConnect": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "storage",
-          "resourceName": "WebSocketConnections"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "MessagingDisconnect": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "storage",
-          "resourceName": "WebSocketConnections"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "MessagingSendMessage": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "storage",
-          "resourceName": "WebSocketConnections"
-        },
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "storage",
-          "resourceName": "ChatMessages"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "PatientCardHandling": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "storage",
-          "resourceName": "PatientCards"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "PutPatients": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "storage",
-          "resourceName": "Doctors"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "SaveUser": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "storage",
-          "resourceName": "users"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -179,31 +71,11 @@
     },
     "VideoCallSendMessage": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "storage",
-          "resourceName": "WebSocketConnections"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "getUserRole": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "storage",
-          "resourceName": "users"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
