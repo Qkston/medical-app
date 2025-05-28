@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  frontend-dev:
+    build:
+      context: ./frontend
+      target: development
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/build
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - FAST_REFRESH=true
+      - REACT_APP_SIGNALING_SERVER_URL=http://localhost:8080
+      - GENERATE_SOURCEMAP=true
+    depends_on:
+      - signaling-server-dev
+    stdin_open: true
+    tty: true
+    command: npm start
+
+  signaling-server-dev:
+    build:
+      context: ./signaling-server
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./signaling-server:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+      - ALLOWED_ORIGIN=http://localhost:3000
+    restart: unless-stopped
+    command: npx nodemon index.js 

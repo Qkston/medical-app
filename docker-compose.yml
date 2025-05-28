@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      target: development
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_SIGNALING_SERVER_URL=http://localhost:8080
+    depends_on:
+      - signaling-server
+    stdin_open: true
+    tty: true
+
+  signaling-server:
+    build:
+      context: ./signaling-server
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./signaling-server:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+      - ALLOWED_ORIGIN=http://localhost:3000
+    restart: unless-stopped
+
+  # Production services (comment out development services above and uncomment below)
+  # frontend-prod:
+  #   build:
+  #     context: ./frontend
+  #     target: production
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - signaling-server-prod
+  #   restart: unless-stopped
+
+  # signaling-server-prod:
+  #   build:
+  #     context: ./signaling-server
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - PORT=8080
+  #     - ALLOWED_ORIGIN=http://localhost
+  #   restart: unless-stopped 
