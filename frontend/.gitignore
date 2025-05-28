@@ -25,6 +25,7 @@ yarn-error.log*
 # TypeScript cache
 *.tsbuildinfo
 .cache/
+.npm
 
 # Bundle analyzer
 bundle-report.html

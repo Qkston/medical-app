@@ -5,11 +5,6 @@
 /.pnp
 .pnp.js
 
-# Frontend dependencies and build
-/frontend/node_modules
-/frontend/build
-/frontend/coverage
-
 # Signaling server dependencies
 /signaling-server/node_modules
 
