@@ -1,10 +1,4 @@
 {
   "resourceName": "Doctors",
-  "serviceType": "imported",
-  "tableName": "Doctors",
-  "partitionKeyName": "doctorId",
-  "partitionKeyType": "S",
-  "sortKeyName": "patientEmail",
-  "sortKeyType": "S",
-  "region": "eu-north-1"
+  "serviceType": "imported"
 }

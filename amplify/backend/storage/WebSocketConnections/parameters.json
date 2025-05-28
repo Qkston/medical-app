@@ -1,8 +1,4 @@
 {
   "resourceName": "WebSocketConnections",
-  "serviceType": "imported",
-  "tableName": "WebSocketConnections",
-  "partitionKeyName": "connectionId",
-  "partitionKeyType": "S",
-  "region": "eu-north-1"
+  "serviceType": "imported"
 }

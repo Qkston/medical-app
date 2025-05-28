@@ -1,8 +1,4 @@
 {
   "resourceName": "PatientCards",
-  "serviceType": "imported",
-  "tableName": "PatientCards",
-  "partitionKeyName": "patientEmail",
-  "partitionKeyType": "S",
-  "region": "eu-north-1"
+  "serviceType": "imported"
 }

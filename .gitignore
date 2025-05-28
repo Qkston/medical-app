@@ -1,15 +1,20 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
+# Root level dependencies
 /node_modules
 /.pnp
 .pnp.js
 
+# Frontend dependencies and build
+/frontend/node_modules
+/frontend/build
+/frontend/coverage
+
+# Signaling server dependencies
+/signaling-server/node_modules
+
 # testing
 /coverage
-
-# production
-/build
 
 # misc
 .DS_Store
@@ -17,6 +22,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
+.env
 
 npm-debug.log*
 yarn-debug.log*
@@ -42,5 +48,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-
-.env

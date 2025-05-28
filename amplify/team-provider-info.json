@@ -1,27 +1,76 @@
 {
-  "staging": {
+  "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-medicalapp-staging-068da-authRole",
-      "UnauthRoleArn": "arn:aws:iam::151407415172:role/amplify-medicalapp-staging-068da-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::151407415172:role/amplify-medicalapp-staging-068da-authRole",
+      "AuthRoleName": "amplify-medicalapp-dev-ea744-authRole",
+      "UnauthRoleArn": "arn:aws:iam::151407415172:role/amplify-medicalapp-dev-ea744-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::151407415172:role/amplify-medicalapp-dev-ea744-authRole",
       "Region": "eu-north-1",
-      "DeploymentBucketName": "amplify-medicalapp-staging-068da-deployment",
-      "UnauthRoleName": "amplify-medicalapp-staging-068da-unauthRole",
-      "StackName": "amplify-medicalapp-staging-068da",
-      "StackId": "arn:aws:cloudformation:eu-north-1:151407415172:stack/amplify-medicalapp-staging-068da/ea323800-526c-11ef-848e-0607b50b4a85",
+      "DeploymentBucketName": "amplify-medicalapp-dev-ea744-deployment",
+      "UnauthRoleName": "amplify-medicalapp-dev-ea744-unauthRole",
+      "StackName": "amplify-medicalapp-dev-ea744",
+      "StackId": "arn:aws:cloudformation:eu-north-1:151407415172:stack/amplify-medicalapp-dev-ea744/32a95fc0-1d1e-11ef-abf7-0ef0eccf8737",
       "AmplifyAppId": "d23mkt96kzjw55"
     },
     "categories": {
-      "storage": {
-        "Doctors": {
-          "tableName": "Doctors",
-          "region": "eu-north-1",
-          "arn": "arn:aws:dynamodb:eu-north-1:151407415172:table/Doctors",
-          "partitionKeyName": "doctorId",
-          "partitionKeyType": "S",
-          "sortKeyName": "patientEmail",
-          "sortKeyType": "S"
+      "function": {
+        "ArchivePatient": {
+          "deploymentBucketName": "amplify-medicalapp-dev-ea744-deployment",
+          "s3Key": "amplify-builds/ArchivePatient-6762494c666c71574557-build.zip"
         },
+        "DoctorSettingsHandling": {
+          "deploymentBucketName": "amplify-medicalapp-dev-ea744-deployment",
+          "s3Key": "amplify-builds/DoctorSettingsHandling-4e5a6c64636179584574-build.zip"
+        },
+        "GetMessages": {
+          "deploymentBucketName": "amplify-medicalapp-dev-ea744-deployment",
+          "s3Key": "amplify-builds/GetMessages-465346686a7549494437-build.zip"
+        },
+        "GetPatients": {
+          "deploymentBucketName": "amplify-medicalapp-dev-ea744-deployment",
+          "s3Key": "amplify-builds/GetPatients-326b666372516f397377-build.zip"
+        },
+        "MessagingConnect": {
+          "deploymentBucketName": "amplify-medicalapp-dev-ea744-deployment",
+          "s3Key": "amplify-builds/MessagingConnect-41634b63487756726532-build.zip"
+        },
+        "MessagingDisconnect": {
+          "deploymentBucketName": "amplify-medicalapp-dev-ea744-deployment",
+          "s3Key": "amplify-builds/MessagingDisconnect-5261494b6d434b467873-build.zip"
+        },
+        "MessagingSendMessage": {
+          "deploymentBucketName": "amplify-medicalapp-dev-ea744-deployment",
+          "s3Key": "amplify-builds/MessagingSendMessage-63466a67654653655753-build.zip"
+        },
+        "PatientCardHandling": {
+          "deploymentBucketName": "amplify-medicalapp-dev-ea744-deployment",
+          "s3Key": "amplify-builds/PatientCardHandling-36566e7831597032446e-build.zip"
+        },
+        "PutPatients": {
+          "deploymentBucketName": "amplify-medicalapp-dev-ea744-deployment",
+          "s3Key": "amplify-builds/PutPatients-59766b62526652687276-build.zip"
+        },
+        "SaveUser": {
+          "deploymentBucketName": "amplify-medicalapp-dev-ea744-deployment",
+          "s3Key": "amplify-builds/SaveUser-554b305572376a616658-build.zip"
+        },
+        "SendInviteEmail": {
+          "deploymentBucketName": "amplify-medicalapp-dev-ea744-deployment",
+          "s3Key": "amplify-builds/SendInviteEmail-73754962727149574954-build.zip"
+        },
+        "SendInviteVideoCallEmail": {
+          "deploymentBucketName": "amplify-medicalapp-dev-ea744-deployment",
+          "s3Key": "amplify-builds/SendInviteVideoCallEmail-50796844624f79434538-build.zip"
+        },
+        "VideoCallSendMessage": {
+          "deploymentBucketName": "amplify-medicalapp-dev-ea744-deployment",
+          "s3Key": "amplify-builds/VideoCallSendMessage-332f6f69346e6f2f3467-build.zip"
+        },
+        "getUserRole": {
+          "deploymentBucketName": "amplify-medicalapp-dev-ea744-deployment",
+          "s3Key": "amplify-builds/getUserRole-69356447436c6d386471-build.zip"
+        }
+      },
+      "storage": {
         "ChatMessages": {
           "tableName": "ChatMessages",
           "region": "eu-north-1",
@@ -29,6 +78,15 @@
           "partitionKeyName": "connectionId",
           "partitionKeyType": "S",
           "sortKeyName": "timestamp",
+          "sortKeyType": "S"
+        },
+        "Doctors": {
+          "tableName": "Doctors",
+          "region": "eu-north-1",
+          "arn": "arn:aws:dynamodb:eu-north-1:151407415172:table/Doctors",
+          "partitionKeyName": "doctorId",
+          "partitionKeyType": "S",
+          "sortKeyName": "patientEmail",
           "sortKeyType": "S"
         },
         "PatientCards": {
@@ -53,89 +111,8 @@
           "partitionKeyType": "S"
         }
       },
-      "function": {
-        "ArchivePatient": {
-          "deploymentBucketName": "amplify-medicalapp-staging-068da-deployment",
-          "s3Key": "amplify-builds/ArchivePatient-LambdaFunction.zip"
-        },
-        "DoctorSettingsHandling": {
-          "deploymentBucketName": "amplify-medicalapp-staging-068da-deployment",
-          "s3Key": "amplify-builds/DoctorSettingsHandling-LambdaFunction.zip"
-        },
-        "GetMessages": {
-          "deploymentBucketName": "amplify-medicalapp-staging-068da-deployment",
-          "s3Key": "amplify-builds/GetMessages-LambdaFunction.zip"
-        },
-        "GetPatients": {
-          "deploymentBucketName": "amplify-medicalapp-staging-068da-deployment",
-          "s3Key": "amplify-builds/GetPatients-LambdaFunction.zip"
-        },
-        "MessagingConnect": {
-          "deploymentBucketName": "amplify-medicalapp-staging-068da-deployment",
-          "s3Key": "amplify-builds/MessagingConnect-LambdaFunction.zip"
-        },
-        "MessagingDisconnect": {
-          "deploymentBucketName": "amplify-medicalapp-staging-068da-deployment",
-          "s3Key": "amplify-builds/MessagingDisconnect-LambdaFunction.zip"
-        },
-        "MessagingSendMessage": {
-          "deploymentBucketName": "amplify-medicalapp-staging-068da-deployment",
-          "s3Key": "amplify-builds/MessagingSendMessage-LambdaFunction.zip"
-        },
-        "PatientCardHandling": {
-          "deploymentBucketName": "amplify-medicalapp-staging-068da-deployment",
-          "s3Key": "amplify-builds/PatientCardHandling-LambdaFunction.zip"
-        },
-        "PutPatients": {
-          "deploymentBucketName": "amplify-medicalapp-staging-068da-deployment",
-          "s3Key": "amplify-builds/PutPatients-LambdaFunction.zip"
-        },
-        "SaveUser": {
-          "deploymentBucketName": "amplify-medicalapp-staging-068da-deployment",
-          "s3Key": "amplify-builds/SaveUser-LambdaFunction.zip"
-        },
-        "SendInviteEmail": {
-          "deploymentBucketName": "amplify-medicalapp-staging-068da-deployment",
-          "s3Key": "amplify-builds/SendInviteEmail-LambdaFunction.zip"
-        },
-        "SendInviteVideoCallEmail": {
-          "deploymentBucketName": "amplify-medicalapp-staging-068da-deployment",
-          "s3Key": "amplify-builds/SendInviteVideoCallEmail-LambdaFunction.zip"
-        },
-        "VideoCallSendMessage": {
-          "deploymentBucketName": "amplify-medicalapp-staging-068da-deployment",
-          "s3Key": "amplify-builds/VideoCallSendMessage-LambdaFunction.zip"
-        },
-        "getUserRole": {
-          "deploymentBucketName": "amplify-medicalapp-staging-068da-deployment",
-          "s3Key": "amplify-builds/getUserRole-LambdaFunction.zip"
-        }
-      },
       "auth": {
-        "medicalapp8e6dbb51": {
-          "userPoolId": "eu-north-1_r6zBega1s",
-          "userPoolName": "medicalapp9576b42c_userpool_9576b42c-dev",
-          "webClientId": "1f97us5rvh9lq4692aojjd4tj9",
-          "nativeClientId": "7hda2hcab9u5r0tnlar0kglq69"
-        }
-      }
-    }
-  },
-  "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-medicalapp-dev-ea744-authRole",
-      "UnauthRoleArn": "arn:aws:iam::151407415172:role/amplify-medicalapp-dev-ea744-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::151407415172:role/amplify-medicalapp-dev-ea744-authRole",
-      "Region": "eu-north-1",
-      "DeploymentBucketName": "amplify-medicalapp-dev-ea744-deployment",
-      "UnauthRoleName": "amplify-medicalapp-dev-ea744-unauthRole",
-      "StackName": "amplify-medicalapp-dev-ea744",
-      "StackId": "arn:aws:cloudformation:eu-north-1:151407415172:stack/amplify-medicalapp-dev-ea744/32a95fc0-1d1e-11ef-abf7-0ef0eccf8737",
-      "AmplifyAppId": "d23mkt96kzjw55"
-    },
-    "categories": {
-      "auth": {
-        "medicalapp9576b42c": {}
+        "medicalapp1a3498f3": {}
       }
     }
   }

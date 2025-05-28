@@ -1,8 +1,4 @@
 {
   "resourceName": "users",
-  "serviceType": "imported",
-  "tableName": "users",
-  "partitionKeyName": "id",
-  "partitionKeyType": "S",
-  "region": "eu-north-1"
+  "serviceType": "imported"
 }
