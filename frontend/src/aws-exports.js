@@ -3,9 +3,10 @@
 
 const awsmobile = {
     "aws_project_region": "eu-north-1",
+    "aws_cognito_identity_pool_id": "eu-north-1:fed3a528-1bdd-4030-91d1-3ee92b05b048",
     "aws_cognito_region": "eu-north-1",
-    "aws_user_pools_id": "eu-north-1_r6zBega1s",
-    "aws_user_pools_web_client_id": "1f97us5rvh9lq4692aojjd4tj9",
+    "aws_user_pools_id": "eu-north-1_iV6w7F9zf",
+    "aws_user_pools_web_client_id": "79esaevksoaeaelv3gumv64l8q",
     "oauth": {},
     "aws_cognito_username_attributes": [
         "EMAIL"
@@ -15,7 +16,9 @@ const awsmobile = {
         "EMAIL"
     ],
     "aws_cognito_mfa_configuration": "OFF",
-    "aws_cognito_mfa_types": [],
+    "aws_cognito_mfa_types": [
+        "SMS"
+    ],
     "aws_cognito_password_protection_settings": {
         "passwordPolicyMinLength": 8,
         "passwordPolicyCharacters": []
@@ -26,11 +29,11 @@ const awsmobile = {
     "aws_dynamodb_all_tables_region": "eu-north-1",
     "aws_dynamodb_table_schemas": [
         {
-            "tableName": "Doctors",
+            "tableName": "ChatMessages",
             "region": "eu-north-1"
         },
         {
-            "tableName": "ChatMessages",
+            "tableName": "Doctors",
             "region": "eu-north-1"
         },
         {
@@ -47,6 +50,5 @@ const awsmobile = {
         }
     ]
 };
-
 
 export default awsmobile;
